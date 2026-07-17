@@ -81,10 +81,19 @@ app.use('/api/projects', projectRoutes);
 const testimonialsRoutes = require('./routes/testimonialRoute');
 app.use('/api/testimonials', testimonialsRoutes);
 
+// ─── Config endpoint for frontend ───
+app.get('/api/config', (req, res) => {
+  res.json({
+    whatsappNumber: process.env.VITE_WHATSAPP_NUMBER || '254727713219',
+    phoneNumber: process.env.VITE_WHATSAPP_NUMBER || '254727713219'
+  });
+});
+
 // Health check (public)
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK' });
 });
+
 
 // ── Catch-all route for client-side routing ──
 app.use((req, res, next) => {
