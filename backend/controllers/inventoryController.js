@@ -26,17 +26,14 @@ const writeInventory = (data) => {
 // GET /api/inventory – get all products for the logged-in user
 exports.getProducts = (req, res) => {
   try {
-    const userId = req.user.id;
     const inventory = readInventory();
-    const userProducts = inventory.filter(item => item.userId === userId);
-    res.json(userProducts);
+    res.json(inventory);
   } catch (err) {
     console.error('Get products error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// ... other imports
 
 // ADD PRODUCT – with image upload
 exports.addProduct = async (req, res) => {
