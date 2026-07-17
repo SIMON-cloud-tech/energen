@@ -41,7 +41,7 @@ const LatestBlogs = () => {
           <div key={blog.id} className="latest-card">
             <div className="latest-image">
               {blog.image ? (
-                <img src={`http://localhost:5000${blog.image}`} alt={blog.title} />
+                <img src={`${import.meta.env.VITE_IMAGE_BASE_URL || ''}${product.image}`} alt={blog.title} />
               ) : (
                 <div className="placeholder-image">No Image</div>
               )}

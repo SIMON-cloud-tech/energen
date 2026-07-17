@@ -32,7 +32,7 @@ const BlogDetail = () => {
       {/* Hero / Image */}
       {blog.image && (
         <div className="blog-detail-hero">
-          <img src={`http://localhost:5000${blog.image}`} alt={blog.title} />
+          <img src={`${import.meta.env.VITE_IMAGE_BASE_URL || ''}${product.image}`} alt={blog.title} />
         </div>
       )}
 

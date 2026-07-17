@@ -82,7 +82,7 @@ const Projects = () => {
             <div key={project.id} className="project-card">
               <div className="project-image">
                 {project.image ? (
-                  <img src={`http://localhost:5000${project.image}`} alt={project.title} />
+                  <img src={`${import.meta.env.VITE_IMAGE_BASE_URL || ''}${product.image}`} alt={project.title} />
                 ) : (
                   <div className="placeholder-image">No Image</div>
                 )}

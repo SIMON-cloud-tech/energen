@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 // -------------------- MIDDLEWARE --------------------
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? 'https://your-app.onrender.com' 
+    ? 'https://energen-6t0a.onrender.com' 
     : 'http://localhost:5173',
   credentials: true
 }));
@@ -20,7 +20,7 @@ app.use(cors({
 // Serve uploaded images with CORS headers
 app.use('/uploads', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', process.env.NODE_ENV === 'production' 
-    ? 'https://your-app.onrender.com' 
+    ? 'https://energen-6t0a.onrender.com' 
     : 'http://localhost:5173');
   res.header('Access-Control-Allow-Credentials', 'true');
   next();
