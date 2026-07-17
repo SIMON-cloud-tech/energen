@@ -66,7 +66,7 @@ const FeaturedProducts = () => {
             <div className="featured-info">
               <h3>{product.name}</h3>
               <p className="featured-description">{product.description}</p>
-              <p className="featured-price">KSH {product.price.toFixed(2)}</p>
+             <p className="product-price">KSH {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             </div>
             <div className="featured-actions">
               <button

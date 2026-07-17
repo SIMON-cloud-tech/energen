@@ -37,11 +37,6 @@ const otpStore = {};
 
 const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-// Send OTP (replace with nodemailer later)
-const sendOtpEmail = (email, otp) => {
-  console.log(`📧 OTP for ${email}: ${otp}`);
-};
-
 // ========== REGISTER ==========
 exports.register = async (req, res) => {
   try {
@@ -69,7 +64,7 @@ exports.register = async (req, res) => {
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email },
       JWT_SECRET,
-      { expiresIn: '7d' }
+      { expiresIn: '7' }
     );
 
     // ✅ Updated cookie settings
@@ -112,12 +107,13 @@ exports.login = async (req, res) => {
     const expiresAt = Date.now() + 5 * 60 * 1000;
     otpStore[email] = { otp, expiresAt };
 
-    sendOtpEmail(email, otp);
 
     res.json({ requiresOtp: true, email, message: 'OTP sent to your email' });
   } catch (err) {
     console.error('Login error:', err);
-    res.status(500).json({ message: 'Server error' });
+     console.error('❌ Login error DETAILS:', err);  // <-- add this
+     console.error('❌ Stack:', err.stack);
+     res.status(500).json({ message: 'Server error' });
   }
 };
 

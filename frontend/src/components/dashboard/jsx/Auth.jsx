@@ -15,10 +15,6 @@ const Auth = ({ setUser }) => {
     password: ''
   });
 
-  const [step, setStep] = useState('login');
-  const [otp, setOtp] = useState('');
-  const [tempEmail, setTempEmail] = useState('');
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -57,19 +53,10 @@ const Auth = ({ setUser }) => {
         return;
       }
 
-      console.log('🔵 Response data:', data); // <-- always log the response
+      console.log('🔵 Response data:', data);
 
       if (res.ok) {
-        // 🟢 LOGIN flow – always show OTP
-        if (isLogin) {
-          setTempEmail(form.email);
-          setStep('otp');
-          setMessage(data.message || 'OTP sent to your email');
-          setLoading(false);
-          return;
-        }
-
-        // 🟢 REGISTRATION flow – cookie is set, go to dashboard
+        // ✅ Login or Registration successful – cookie is set, go to dashboard
         setUser(data.user);
         navigate('/dashboard');
       } else {
@@ -82,87 +69,6 @@ const Auth = ({ setUser }) => {
       setLoading(false);
     }
   };
-
-  const handleOtpSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage('');
-
-    try {
-      const res = await fetch('/api/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: tempEmail, otp }),
-        credentials: 'include'
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setUser(data.user);
-        navigate('/dashboard');
-      } else {
-        setMessage(data.message || 'Invalid OTP');
-      }
-    } catch (err) {
-      console.error('❌ OTP error:', err);
-      setMessage('Network error. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const goBackToLogin = () => {
-    setStep('login');
-    setOtp('');
-    setMessage('');
-    setTempEmail('');
-  };
-
-  if (step === 'otp') {
-    return (
-      <div className="auth">
-        <div className="auth-left">
-          <div className="logo-container">
-            <FiDollarSign size={80} color="#3498db" />
-          </div>
-          <h1>Wallet</h1>
-          <p>Enter the 6‑digit code sent to your email.</p>
-        </div>
-        <div className="auth-right">
-          <div className="auth-form">
-            <h2>Verify OTP</h2>
-            <form onSubmit={handleOtpSubmit}>
-              <div className="form-group">
-                <label>Enter OTP Code</label>
-                <input
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  placeholder="123456"
-                  maxLength="6"
-                  required
-                />
-              </div>
-              {message && (
-                <p className={`auth-message ${message.includes('successful') ? 'success' : 'error'}`}>
-                  {message}
-                </p>
-              )}
-              <button type="submit" className="auth-btn" disabled={loading}>
-                {loading ? 'Verifying...' : 'Verify OTP'}
-              </button>
-              <p className="auth-toggle" style={{ marginTop: '1rem' }}>
-                <span onClick={goBackToLogin} style={{ cursor: 'pointer', color: '#3498db' }}>
-                  ← Go back to login
-                </span>
-              </p>
-            </form>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="auth">

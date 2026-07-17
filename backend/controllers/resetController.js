@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const { sendOTPEmail } = require('../utils/sendEmail');
 
 // Paths
 const usersPath = path.join(__dirname, '../data/profile.json');
@@ -58,6 +59,8 @@ exports.sendOtp = async (req, res) => {
 
     // For development, log OTP and return it in response (remove in production)
     console.log(`📧 OTP for ${email}: ${otp}`);
+    //send otp via email to the client
+    await sendOTPEmail(email, otp, 'password reset');
 
     res.json({
       message: 'OTP sent successfully (check console)',

@@ -1,0 +1,10 @@
+node_modules/
+*.log
+.git/
+.env
+*.md
+.DS_Store
+uploads/
+backend/data/
+frontend/dist/
+backend/public/

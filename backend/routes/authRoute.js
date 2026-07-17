@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.post('/register', register);
 router.post('/login', login);
-router.post('/verify-otp', verifyLoginOtp);
 router.get('/profile', authMiddleware, getProfile);
 router.post('/logout', logout);
 
