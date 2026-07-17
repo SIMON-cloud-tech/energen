@@ -1,0 +1,94 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.process-section {
+  padding: 4rem 1.5rem;
+  max-width: 100vw;
+  background-color: #f8f9fa;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.process-title {
+  font-size: 2.2rem;
+  color: #1a2a6c;
+  margin-bottom: 2.5rem;
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.process-step {
+  background: white;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  /* 🟢 Zoom‑in animation on load */
+  opacity: 0;
+  animation: zoomIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.process-step:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.process-step:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.process-step:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+.process-step:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.step-icon {
+  color: #f39c12;
+  margin-bottom: 1rem;
+}
+
+.step-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1a2a6c;
+  margin-bottom: 0.5rem;
+}
+
+.step-description {
+  color: #555;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .process-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .process-title {
+    font-size: 1.8rem;
+  }
+  .step-title {
+    font-size: 1.1rem;
+  }
+}

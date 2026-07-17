@@ -1,0 +1,299 @@
+/* ============================================
+   PRODUCTS PAGE
+   ============================================ */
+.products-page {
+  max-width: 100vw;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* ============================================
+   HEADER – all content centred
+   ============================================ */
+.products-header {
+  position: relative;           /* anchor for the absolute button */
+  max-width: 1000px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+  text-align: center;           /* centres all inline text */
+}
+
+.products-header h2 {
+  font-size: 2rem;
+  color: #1a2a6c;
+  margin: 0 0 0.25rem;
+}
+
+.products-header p {
+  font-size: 1.05rem;
+  color: #555;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0.25rem auto;         /* centres the block */
+}
+
+.products-header h4 {
+  font-size: 1.1rem;
+  color: #f39c12;
+  margin: 0 0 0.75rem;
+  font-weight: 600;
+}
+
+/* ============================================
+   SEARCH BAR – centred, 60% width
+   ============================================ */
+.searchbar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.search-input {
+  width: 60%;
+  padding: 0.6rem 1rem;
+  border: 1px solid #e1e8ed;
+  border-radius: 20px;
+  line-height: 2rem;
+  font-size: 0.95rem;
+  transition: border-color 0.3s;
+  background: white;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #f39c12;
+}
+
+/* ============================================
+   LOAD MORE BUTTON – top‑right
+   ============================================ */
+.load-more-btn {
+  position: absolute;
+  top: 0.2rem;
+  right: 0;
+  padding: 0.5rem 1.2rem;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.load-more-btn:hover {
+  background: #2980b9;
+}
+
+/* ============================================
+   PRODUCT GRID
+   ============================================ */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* ============================================
+   PRODUCT CARD
+   ============================================ */
+.product-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  /* Zoom‑in animation */
+  opacity: 0;
+  animation: zoomIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Staggered delays – first six cards */
+.product-card:nth-child(1) { animation-delay: 0.05s; }
+.product-card:nth-child(2) { animation-delay: 0.15s; }
+.product-card:nth-child(3) { animation-delay: 0.25s; }
+.product-card:nth-child(4) { animation-delay: 0.35s; }
+.product-card:nth-child(5) { animation-delay: 0.45s; }
+.product-card:nth-child(6) { animation-delay: 0.55s; }
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Offer badge */
+.offer-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #e67e22;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+/* Image */
+.product-image {
+  height: 180px;
+  background: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+.placeholder-image {
+  color: #95a5a6;
+  font-size: 0.9rem;
+}
+
+/* Info */
+.product-info {
+  padding: 1rem 1rem 0.5rem;
+  flex: 1;
+}
+
+.product-info h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.product-description {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-price {
+  font-weight: 600;
+  color: #27ae60;
+  font-size: 1.1rem;
+  margin: 0.5rem 0 0;
+}
+
+/* Add to Cart – appears on hover */
+.product-actions {
+  padding: 0.75rem 1rem 1rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.product-card:hover .product-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.add-to-cart-btn {
+  width: 100%;
+  padding: 010px 20px;
+  background: #1a2a6c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.add-to-cart-btn:hover {
+  background: #132a6c;
+}
+
+/* ============================================
+   EMPTY / LOADING STATES
+   ============================================ */
+.no-products {
+  text-align: center;
+  padding: 3rem 0;
+  color: #95a5a6;
+}
+
+.products-loading {
+  text-align: center;
+  padding: 3rem 0;
+  color: #7f8c8d;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .search-input {
+    width: 100%;               /* full width on tablets */
+  }
+
+  .load-more-btn {
+    position: static;           /* drops below the search bar */
+    margin-top: 0.5rem;
+    align-self: flex-end;
+  }
+
+  .searchbar {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .products-header p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .products-page {
+    padding: 1rem;
+  }
+
+  .load-more-btn {
+    align-self: stretch;
+  }
+}

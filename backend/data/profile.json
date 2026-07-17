@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Simon Mwangangi",
+    "email": "simonmbithi143@gmail.com",
+    "password": "$2b$10$HLqRmZUXBI81U3n8EXvFGuRa/ld3ybaVX3.T9jCzd2qign/FXapiS"
+  },
+  {
+    "id": 2,
+    "name": "John Mutie",
+    "email": "john342@gmail.com",
+    "password": "$2b$10$7jfnBAXn804ZgaVwq3D0y..021CZ2aF2763coP9xbz7XdrSiV6O/C"
+  }
+]

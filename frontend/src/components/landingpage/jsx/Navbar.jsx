@@ -1,0 +1,93 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FiShoppingCart, FiMenu, FiX, FiSettings } from 'react-icons/fi';
+import Cart from './Cart';
+import '../css/Navbar.css';
+
+const MENU_ITEMS = [
+  { label: 'Home', path: '/' },
+  { label: 'About', path: '/about' },
+  { label: 'Products', path: '/products' },
+  { label: 'Projects', path: '/projects' },
+  { label: 'Blogs', path: '/blogs' },
+  { label: 'Contact', path: '/contact' },
+];
+
+const Navbar = ({ cart, setCart, cartCount = 0 }) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+  const toggleCart = () => setCartOpen(!cartOpen);
+  const closeCart = () => setCartOpen(false);
+
+
+  return (
+    <>
+      <nav className="navbar">
+        <div className="navbar-container">
+          <Link to="/" className="navbar-logo">
+            <span className="logo-text">Ener<span className="highlight">gen</span></span>
+          </Link>
+
+          <ul className="nav-menu">
+            {MENU_ITEMS.map((item) => (
+              <li key={item.path} className="nav-item">
+                <Link to={item.path} className="nav-link" onClick={closeMobileMenu}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className="nav-right">
+
+            {/* Cart icon – now a button (not a Link) */}
+            <button className="cart-icon-wrapper" onClick={toggleCart} aria-label="Open cart">
+              <FiShoppingCart size={24} />
+              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+            </button>
+
+            <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
+              {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
+          <ul className="mobile-nav-menu">
+            {MENU_ITEMS.map((item) => (
+              <li key={item.path} className="mobile-nav-item">
+                <Link to={item.path} className="mobile-nav-link" onClick={closeMobileMenu}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+            <li className="mobile-nav-item">
+              <Link to="/admin" className="mobile-nav-link" onClick={closeMobileMenu}>
+                Admin
+              </Link>
+            </li>
+            <li className="mobile-nav-item">
+              <button className="mobile-nav-link" onClick={() => { closeMobileMenu(); toggleCart(); }}>
+                Cart {cartCount > 0 && <span className="mobile-cart-badge">{cartCount}</span>}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      {/* Cart Drawer */}
+      <Cart
+        cart={cart}
+        setCart={setCart}
+        isOpen={cartOpen}
+        onClose={closeCart}
+      />
+    </>
+  );
+};
+
+export default Navbar;

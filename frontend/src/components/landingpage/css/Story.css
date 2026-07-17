@@ -1,0 +1,188 @@
+/* ── About Page ── */
+.about-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+/* ── Hero / Intro ── */
+.about-hero {
+  position: relative;
+  border-radius: 12px;
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.about-hero-overlay {
+  padding: 2rem;
+  border-radius: 12px;
+  color: #333;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-hero h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.about-hero p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* ── Content: Image + Text ── */
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+.about-image {
+  height: 350px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;        /* ensures image doesn't spill out */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;       /* crops image to fit the box neatly */
+}
+
+.about-text h2 {
+  font-size: 2rem;
+  color: #1a2a6c;
+  margin-bottom: 1rem;
+}
+
+.about-text p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.about-text .tagline {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f39c12;
+  letter-spacing: 1px;
+}
+
+/* ── Mission, Vision, Values ── */
+.about-mvv {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.mvv-card {
+  background: white;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  opacity: 0;
+  animation: zoomIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.mvv-card:nth-child(1) { animation-delay: 0.1s; }
+.mvv-card:nth-child(2) { animation-delay: 0.3s; }
+.mvv-card:nth-child(3) { animation-delay: 0.5s; }
+
+.mvv-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.mvv-card h3 {
+  font-size: 1.4rem;
+  color: #1a2a6c;
+  margin-bottom: 0.75rem;
+}
+
+.mvv-card p {
+  color: #555;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.mvv-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mvv-card ul li {
+  padding: 0.3rem 0;
+  font-weight: 500;
+  color: #1a2a6c;
+}
+
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .about-content {
+    grid-template-columns: 1fr;
+  }
+
+  .about-image {
+    height: 250px;
+    order: -1;
+  }
+
+  .about-mvv {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .about-hero h1 {
+    font-size: 2rem;
+  }
+  .about-hero p {
+    font-size: 1rem;
+  }
+  .about-text h2 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-image {
+    height: 200px;
+  }
+  .about-text p {
+    font-size: 0.95rem;
+  }
+  .mvv-card {
+    padding: 1.5rem 1rem;
+  }
+}
