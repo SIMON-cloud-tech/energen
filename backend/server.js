@@ -3,11 +3,37 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const fs = require('fs');
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// ── Ensure data directory and JSON files exist (ONLY if missing) ──
+const dataDir = path.join(__dirname, 'data');
+
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+  console.log('✅ Created data directory');
+}
+
+const dataFiles = {
+  'blogs.json': '[]',
+  'projects.json': '[]',
+  'inventory.json': '[]',
+  'testimonials.json': '[]',
+  'profile.json': '[]',
+  'otpStore.json': '{}'
+};
+
+Object.entries(dataFiles).forEach(([file, content]) => {
+  const filePath = path.join(dataDir, file);
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, content, 'utf8');
+    console.log(`✅ Created ${file}`);
+  }
+});
 
 // -------------------- MIDDLEWARE --------------------
 app.use(cors({
