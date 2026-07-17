@@ -51,9 +51,12 @@ const ProductManage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('🟢 Form submitted!');  // <-- ADD THIS
+    console.log('🟢 Editing ID:', editingId)
     try {
       const url = editingId ? `/api/inventory/${editingId}` : '/api/inventory';
       const method = editingId ? 'PUT' : 'POST';
+      console.log('🟢 URL:', url, 'Method:', method); 
 
       const form = new FormData();
       form.append('name', formData.name);
