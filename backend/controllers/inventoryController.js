@@ -23,7 +23,7 @@ const writeInventory = (data) => {
   fs.writeFileSync(inventoryPath, JSON.stringify(data, null, 2), 'utf8');
 };
 
-// GET /api/inventory – get all products for the logged-in user
+// GET /api/inventory – get all products for public
 exports.getProducts = (req, res) => {
   try {
     const inventory = readInventory();

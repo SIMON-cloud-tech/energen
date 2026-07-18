@@ -182,8 +182,10 @@ const Dashboard = ({ setUser }) => {
         </section>
 
         <footer className="dashboard-footer">
-          <p>© {new Date().getFullYear()} Energen Systems &amp; General Supplies Ltd. All Rights Reserved.</p>
-          <p>Energy That Cares ☀️</p>
+         <p>© {new Date().getFullYear()} Energen Systems &amp; General Supplies Ltd. All Rights Reserved.</p>
+        <Link to="/" className="dashboard-footer-link">
+         <p>Energy That Cares ☀️</p>
+        </Link>
         </footer>
       </main>
     </div>
