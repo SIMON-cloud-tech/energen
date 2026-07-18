@@ -1,23 +1,40 @@
 /* ════════════════════════════════════════
-   CONTACT PAGE
+   CONTACT SECTION — ENERGEN
+   Dark premium theme with brand colors
    ════════════════════════════════════════ */
+
 .contact-section {
-  padding: 3rem 1.5rem;
-  max-width: 100vw;
-  margin: 0 auto;
+  --c-bg: #0f1a3a;
+  --c-surface: #16162b;
+  --c-surface-2: #1f1f3a;
+  --c-border: #2a2a4a;
+
+  --c-accent: #f39c12;
+  --c-accent-soft: rgba(243, 156, 18, 0.12);
+  --c-accent-warm: #e67e22;
+
+  --c-wa: #25d366;
+
+  --c-text-head: #f5f0eb;
+  --c-text-body: #b0a8a0;
+  --c-text-dim: #6a635c;
+
+  --c-success-bg: rgba(37, 211, 102, 0.1);
+  --c-success-border: rgba(37, 211, 102, 0.2);
+
+  --radius: 14px;
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --transition: 180ms ease;
+
+  width: 100%;
+  background:
+    radial-gradient(circle at top right, rgba(243, 156, 18, 0.08), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(26, 42, 108, 0.12), transparent 30%),
+    var(--c-bg);
+
+  padding: 5rem 1.4rem 0;
   position: relative;
   overflow: hidden;
-
-  /* ── NAVBAR BLUE as base background ── */
-  background-color: #2d3e8317;
-
-  /* ── BOLD, VISIBLE GRADIENTS ── */
-  background-image:
-    radial-gradient(circle at top left, rgba(243, 156, 18, 0.35), transparent 50%),
-    radial-gradient(circle at bottom right, rgba(230, 126, 34, 0.25), transparent 45%),
-    radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent 30%);
-
-  /* ── Text color changes to white ── */
   color: white;
 }
 
@@ -26,7 +43,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.06;
+  opacity: 0.04;
   pointer-events: none;
   background-image:
     repeating-linear-gradient(
@@ -36,7 +53,6 @@
       transparent 1px,
       transparent 4px
     );
-  border-radius: 12px;
 }
 
 /* ── Ensure content sits above the pseudo-element ── */
@@ -44,7 +60,11 @@
   position: relative;
   z-index: 1;
 }
-/* ── Header ── */
+
+/* ════════════════════════════════════════
+   HEADER
+   ════════════════════════════════════════ */
+
 .contact-header {
   text-align: center;
   margin-bottom: 2.5rem;
@@ -52,18 +72,21 @@
 
 .contact-title {
   font-size: 2.2rem;
-  color: #1a2a6c;
+  color: #f39c12;
   margin-bottom: 0.5rem;
 }
 
 .contact-subtitle {
   font-size: 1.05rem;
-  color: #555;
+  color: rgba(255, 255, 255, 0.8);
   max-width: 650px;
   margin: 0 auto;
 }
 
-/* ── Body (2‑column) ── */
+/* ════════════════════════════════════════
+   BODY (2‑column)
+   ════════════════════════════════════════ */
+
 .contact-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -73,15 +96,16 @@
 
 /* ── Left ── */
 .contact-left {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
   padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .contact-left h3 {
   font-size: 1.3rem;
-  color: #1a2a6c;
+  color: #f39c12;
   margin-bottom: 1rem;
 }
 
@@ -91,9 +115,9 @@
   gap: 0.75rem;
   padding: 0.5rem 0;
   text-decoration: none;
-  color: #333;
+  color: rgba(255, 255, 255, 0.85);
   transition: color 0.3s;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .detail-row:last-child {
@@ -113,13 +137,13 @@
 .detail-row strong {
   display: block;
   font-size: 0.85rem;
-  color: #777;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .detail-row p {
   margin: 0;
   font-size: 0.95rem;
-  color: #333;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .hours-card,
@@ -130,42 +154,44 @@
 .hours-card h4,
 .delivery-areas h4 {
   font-size: 1rem;
-  color: #1a2a6c;
+  color: #f39c12;
   margin-bottom: 0.5rem;
 }
 
 .hours-card p {
   font-size: 0.9rem;
-  color: #555;
+  color: rgba(255, 255, 255, 0.7);
   margin: 0.2rem 0;
 }
 
 .delivery-areas p {
   font-size: 0.9rem;
-  color: #555;
+  color: rgba(255, 255, 255, 0.7);
   line-height: 1.5;
 }
 
 /* ── Right (Form) ── */
 .contact-right {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
   padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .contact-right h3 {
   font-size: 1.3rem;
-  color: #1a2a6c;
+  color: #f39c12;
   margin-bottom: 0.5rem;
 }
 
 .success {
-  background: #d4edda;
-  color: #155724;
+  background: rgba(37, 211, 102, 0.15);
+  color: #2ecc71;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   margin-bottom: 0.75rem;
+  border: 1px solid rgba(37, 211, 102, 0.2);
 }
 
 .contact-form input,
@@ -173,18 +199,25 @@
   width: 100%;
   padding: 0.65rem 0.8rem;
   margin-bottom: 0.75rem;
-  background-color: transparent;
-  border: 1px solid rgba(122, 6, 6, 0.295);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 5px;
   font-size: 0.9rem;
+  color: white;
   box-sizing: border-box;
   transition: border-color 0.3s;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
   outline: none;
   border-color: #f39c12;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .contact-form textarea {
@@ -195,26 +228,27 @@
 .contact-form button {
   width: 100%;
   padding: 0.7rem;
-  background: #1a2a6c;
-  color: white;
+  background: #f39c12;
+  color: #0f1a3a;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s;
 }
 
 .contact-form button:hover {
-  background: #1a2a6c;
+  background: #e67e22;
+  transform: scale(1.01);
 }
 
 /* ── Map ── */
 .contact-map {
   margin-top: 2rem;
-  border-radius: 10px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .contact-map iframe {

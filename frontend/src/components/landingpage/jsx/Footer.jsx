@@ -11,6 +11,10 @@ import '../css/Footer.css';
 const Footer = () => {
   return (
     <footer className="footer">
+       {/* ── ENERGEN WATERMARK ── */}
+      <div className="footer-watermark">
+        <span className="footer-watermark-text">ENERGEN</span>
+      </div>
       <div className="footer-container">
 
         {/* TOP SECTION */}

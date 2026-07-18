@@ -98,7 +98,6 @@ Looking forward to your reply ☀️
 
   return (
     <section className="contact-section">
-
       {/* HEADER */}
       <div className="contact-header">
         <h2 className="contact-title">Get in Touch</h2>

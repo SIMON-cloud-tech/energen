@@ -83,4 +83,4 @@ coverage/
 .nyc_output/
 *.pem
 *.cert
-*.key
+*.keybackend/data/*.json
