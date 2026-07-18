@@ -11,15 +11,13 @@ const readProjects = () => {
     }
     const data = fs.readFileSync(projectsPath, 'utf8');
     if (!data || data.trim() === '') {
-      fs.writeFileSync(projectsPath, JSON.stringify([]), 'utf8');
-      return [];
+      return []; 
     }
     return JSON.parse(data);
   } catch {
     return [];
   }
 };
-
 const writeProjects = (data) => {
   fs.writeFileSync(projectsPath, JSON.stringify(data, null, 2), 'utf8');
 };

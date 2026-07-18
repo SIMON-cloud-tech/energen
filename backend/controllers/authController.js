@@ -18,7 +18,6 @@ const readUsers = () => {
     }
     const data = fs.readFileSync(usersPath, 'utf8');
     if (!data || data.trim() === '') {
-      fs.writeFileSync(usersPath, JSON.stringify([]), 'utf8');
       return [];
     }
     const parsed = JSON.parse(data);

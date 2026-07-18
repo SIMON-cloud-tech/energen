@@ -10,13 +10,11 @@ const readBlogs = () => {
       return [];
     }
     const data = fs.readFileSync(blogsPath, 'utf8');
-    if (!data || data.trim() === '') {
-      fs.writeFileSync(blogsPath, JSON.stringify([]), 'utf8');
-      return [];
-    }
+    // ✅ Remove the empty file check – just parse it
     return JSON.parse(data);
   } catch (err) {
     console.error('Error reading blogs:', err);
+    // ❌ Don't overwrite on error – just return empty array
     return [];
   }
 };

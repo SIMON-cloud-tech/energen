@@ -17,7 +17,6 @@ const readInventory = () => {
     return [];
   }
 };
-
 // Helper: write inventory
 const writeInventory = (data) => {
   fs.writeFileSync(inventoryPath, JSON.stringify(data, null, 2), 'utf8');

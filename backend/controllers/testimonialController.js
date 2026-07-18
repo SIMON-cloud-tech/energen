@@ -12,8 +12,7 @@ const readTestimonials = () => {
     }
     const data = fs.readFileSync(testimonialsPath, 'utf8');
     if (!data || data.trim() === '') {
-      fs.writeFileSync(testimonialsPath, JSON.stringify([]), 'utf8');
-      return [];
+      return [];  // ✅ Just return empty array, don't overwrite
     }
     return JSON.parse(data);
   } catch {
