@@ -30,7 +30,7 @@
   background:
     radial-gradient(circle at top right, rgba(243, 156, 18, 0.08), transparent 28%),
     radial-gradient(circle at bottom left, rgba(26, 42, 108, 0.12), transparent 30%),
-    var(--c-bg);
+    var(#0f1a3a);
 
   padding: 5rem 1.4rem 0;
   position: relative;
