@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { FiEye, FiEyeOff, FiDollarSign } from 'react-icons/fi';
+import { FiEye, FiEyeOff, FiSun } from 'react-icons/fi';
 import '../css/Auth.css';
 
 const Auth = ({ setUser }) => {
@@ -74,10 +74,14 @@ const Auth = ({ setUser }) => {
     <div className="auth">
       <div className="auth-left">
         <div className="logo-container">
-          <FiDollarSign size={80} color="#3498db" />
+          <FiSun size={80} color="#f39c12" />
         </div>
-        <h1>Wallet</h1>
-        <p>Manage your finances, track allocations, and grow your savings all in one place.</p>
+       <h1>Energen</h1>
+        <p>
+          Power your world with clean, reliable solar energy. 
+          Explore our products, projects, and expert solar solutions 
+          designed for Kenyan homes and businesses.
+        </p>
       </div>
 
       <div className="auth-right">
