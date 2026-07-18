@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   FiPackage, FiEdit, FiBox, FiSettings,
   FiLogOut, FiSun, FiMoon,
