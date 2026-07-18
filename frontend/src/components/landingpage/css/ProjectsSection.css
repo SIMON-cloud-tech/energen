@@ -8,7 +8,7 @@
    background:
     radial-gradient(circle at top right, rgba(43, 143, 209, 0.08), transparent 28%),
     radial-gradient(circle at bottom left, rgba(26, 42, 108, 0.884), transparent 30%),
-    var(#0f1a3a);
+    #0f1a3a;
 }
 
 /* ── BRICK WALL BACKGROUND (like contact.css) ── */
