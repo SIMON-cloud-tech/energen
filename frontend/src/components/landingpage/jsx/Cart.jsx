@@ -16,7 +16,7 @@ const CartItem = memo(({ item, onIncrement, onDecrement, onRemove }) => (
   <li className="cart-item">
     <div className="cart-item__thumb">
       <img
-        src={item.image ? `http://localhost:5000/uploads/${item.image}` : '/placeholder.jpg'}
+        src={item.image ? `${import.meta.env.VITE_IMAGE_BASE_URL || ''}/uploads/${item.image}` : '/placeholder.jpg'}
         alt={item.name}
         loading="lazy"
       />
