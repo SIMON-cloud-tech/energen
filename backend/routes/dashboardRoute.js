@@ -1,17 +1,23 @@
+// routes/dashboardRoute.js
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const User = require('../models/User');
+const authMiddleware = require('../middleware/authMiddleware');
+
 const router = express.Router();
 
-// GET /api/profile
-router.get('/profile', (req, res) => {
+// GET /api/dashboard/profile
+// Protected — only the logged-in admin can view their own profile.
+// req.user.id comes from the verified JWT (set by authMiddleware), never from the client.
+router.get('/profile', authMiddleware, async (req, res) => {
   try {
-    const profilePath = path.join(__dirname, '../data/profile.json');
-    const data = fs.readFileSync(profilePath, 'utf8');
-    res.json(JSON.parse(data));
+    const user = await User.findById(req.user.id).select('-password'); // never return the hash
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ id: user._id, name: user.name, email: user.email, createdAt: user.createdAt });
   } catch (err) {
-    console.error('Error reading profile:', err);
-    res.status(500).json({ error: 'Failed to load profile' });
+    console.error('Get dashboard profile error:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

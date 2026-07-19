@@ -1,146 +1,124 @@
-const fs = require('fs');
-const path = require('path');
+// controllers/resetController.js
 const bcrypt = require('bcryptjs');
+const User = require('../models/User');
+const OtpStore = require('../models/otpStore');
 const { sendOTPEmail } = require('../utils/sendEmail');
 
-// Paths
-const usersPath = path.join(__dirname, '../data/profile.json');
-const otpPath = path.join(__dirname, '../data/otpStore.json');
+const MAX_ATTEMPTS = 5;
+const OTP_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
-// Helper: read/write users
-const readUsers = () => {
-  try {
-    if (!fs.existsSync(usersPath)) return [];
-    const data = fs.readFileSync(usersPath, 'utf8');
-    const parsed = JSON.parse(data);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch { return []; }
-};
-
-const writeUsers = (users) => {
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
-};
-
-// Helper: read/write OTP store
-const readOtpStore = () => {
-  try {
-    if (!fs.existsSync(otpPath)) return {};
-    const data = fs.readFileSync(otpPath, 'utf8');
-    return JSON.parse(data);
-  } catch { return {}; }
-};
-
-const writeOtpStore = (store) => {
-  fs.writeFileSync(otpPath, JSON.stringify(store, null, 2));
-};
-
-// Generate random 6-digit OTP
 const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-// 1. SEND OTP
+// ========== 1. SEND OTP ==========
 exports.sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: 'Email is required' });
 
-    const users = readUsers();
-    const user = users.find(u => u.email === email);
+    const normalizedEmail = email.toLowerCase().trim();
+    const user = await User.findOne({ email: normalizedEmail });
+
+    // Always return the same success message whether or not the account exists —
+    // otherwise this endpoint becomes a tool for checking who has an account.
     if (!user) {
-      return res.status(404).json({ message: 'No account found with this email' });
+      return res.json({ message: 'If that email is registered, a code has been sent.' });
     }
 
     const otp = generateOtp();
-    const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+    const expiresAt = Date.now() + OTP_TTL_MS;
 
-    // Store OTP
-    const otpStore = readOtpStore();
-    otpStore[email] = { otp, expiresAt };
-    writeOtpStore(otpStore);
+    await OtpStore.findOneAndUpdate(
+      { email: normalizedEmail },
+      { otp, expiresAt, attempts: 0 }, // reset attempts on every new OTP
+      { upsert: true, new: true }
+    );
 
-    // For development, log OTP and return it in response (remove in production)
-    console.log(`📧 OTP for ${email}: ${otp}`);
-    //send otp via email to the client
-    await sendOTPEmail(email, otp, 'password reset');
+    await sendOTPEmail(normalizedEmail, otp, 'password reset');
 
-    res.json({
-      message: 'OTP sent successfully (check console)',
-      // Include OTP in response ONLY for testing – remove later
-      otp: otp // remove this in production
-    });
+    // Never echo the OTP back in the response or logs in production.
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`📧 OTP for ${normalizedEmail}: ${otp}`);
+    }
+
+    res.json({ message: 'If that email is registered, a code has been sent.' });
   } catch (err) {
     console.error('Send OTP error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// 2. VERIFY OTP
+// ========== 2. VERIFY OTP ==========
 exports.verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
     if (!email || !otp) return res.status(400).json({ message: 'Email and OTP required' });
 
-    const otpStore = readOtpStore();
-    const record = otpStore[email];
-    if (!record) {
-      return res.status(400).json({ message: 'No OTP requested for this email' });
-    }
+    const normalizedEmail = email.toLowerCase().trim();
+    const record = await OtpStore.findOne({ email: normalizedEmail });
 
-    if (record.otp !== otp) {
-      return res.status(400).json({ message: 'Invalid OTP' });
+    if (!record) {
+      return res.status(400).json({ message: 'Invalid or expired code' });
     }
 
     if (Date.now() > record.expiresAt) {
-      delete otpStore[email];
-      writeOtpStore(otpStore);
-      return res.status(400).json({ message: 'OTP has expired' });
+      await OtpStore.deleteOne({ email: normalizedEmail });
+      return res.status(400).json({ message: 'Invalid or expired code' });
     }
 
-    // Mark as verified (optional – we can just allow reset after verification)
-    // We'll keep the OTP record but we can set a flag – we'll just let the reset endpoint check again.
-    res.json({ message: 'OTP verified successfully' });
+    if (record.attempts >= MAX_ATTEMPTS) {
+      await OtpStore.deleteOne({ email: normalizedEmail });
+      return res.status(429).json({ message: 'Too many attempts. Please request a new code.' });
+    }
+
+    if (record.otp !== otp) {
+      record.attempts += 1;
+      await record.save();
+      return res.status(400).json({ message: 'Invalid or expired code' });
+    }
+
+    res.json({ message: 'Code verified successfully' });
   } catch (err) {
     console.error('Verify OTP error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// 3. RESET PASSWORD (after OTP verified)
+// ========== 3. RESET PASSWORD (re-verifies OTP server-side) ==========
 exports.resetPassword = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
     if (!email || !otp || !newPassword) {
-      return res.status(400).json({ message: 'Email, OTP, and new password required' });
+      return res.status(400).json({ message: 'Email, code, and new password required' });
+    }
+    if (newPassword.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters' });
     }
 
-    // Verify OTP again
-    const otpStore = readOtpStore();
-    const record = otpStore[email];
+    const normalizedEmail = email.toLowerCase().trim();
+    const record = await OtpStore.findOne({ email: normalizedEmail });
+
     if (!record) {
-      return res.status(400).json({ message: 'No OTP requested for this email' });
-    }
-    if (record.otp !== otp) {
-      return res.status(400).json({ message: 'Invalid OTP' });
+      return res.status(400).json({ message: 'Invalid or expired code' });
     }
     if (Date.now() > record.expiresAt) {
-      delete otpStore[email];
-      writeOtpStore(otpStore);
-      return res.status(400).json({ message: 'OTP has expired' });
+      await OtpStore.deleteOne({ email: normalizedEmail });
+      return res.status(400).json({ message: 'Invalid or expired code' });
     }
-
-    // Update user password
-    const users = readUsers();
-    const userIndex = users.findIndex(u => u.email === email);
-    if (userIndex === -1) {
-      return res.status(404).json({ message: 'User not found' });
+    if (record.attempts >= MAX_ATTEMPTS) {
+      await OtpStore.deleteOne({ email: normalizedEmail });
+      return res.status(429).json({ message: 'Too many attempts. Please request a new code.' });
+    }
+    if (record.otp !== otp) {
+      record.attempts += 1;
+      await record.save();
+      return res.status(400).json({ message: 'Invalid or expired code' });
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    users[userIndex].password = hashedPassword;
-    writeUsers(users);
+    await User.findOneAndUpdate({ email: normalizedEmail }, { password: hashedPassword });
 
-    // Delete OTP after successful reset
-    delete otpStore[email];
-    writeOtpStore(otpStore);
+    // Delete OTP immediately — it must be single-use, not reusable until expiry.
+    await OtpStore.deleteOne({ email: normalizedEmail });
 
     res.json({ message: 'Password reset successful' });
   } catch (err) {

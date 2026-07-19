@@ -1,34 +1,19 @@
-const fs = require('fs');
-const path = require('path');
+// controllers/authController.js
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key-change-in-production';
-const usersPath = path.join(__dirname, '../data/profile.json');
+// Fail loudly if JWT_SECRET is missing — never fall back to a hardcoded string.
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET is not set in environment variables — refusing to start server');
+}
 
-// ========== HELPERS ==========
-
-const readUsers = () => {
-  try {
-    const dir = path.dirname(usersPath);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    if (!fs.existsSync(usersPath)) {
-      fs.writeFileSync(usersPath, JSON.stringify([]), 'utf8');
-      return [];
-    }
-    const data = fs.readFileSync(usersPath, 'utf8');
-    if (!data || data.trim() === '') {
-      return [];
-    }
-    const parsed = JSON.parse(data);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-};
-
-const writeUsers = (users) => {
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2), 'utf8');
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
 };
 
 // ========== REGISTER ==========
@@ -38,39 +23,39 @@ exports.register = async (req, res) => {
     if (!fullName || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
+    if (password.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters' });
+    }
+    //normalize Email address
+    const normalizedEmail = email.toLowerCase().trim();
 
-    const users = readUsers();
-    if (users.find(u => u.email === email)) {
+    const existingUser = await User.findOne({ email: normalizedEmail });
+    if (existingUser) {
       return res.status(400).json({ message: 'Email already registered' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = {
-      id: users.length + 1,
+
+    const newUser = new User({
       name: fullName,
-      email,
+      email: normalizedEmail,
       password: hashedPassword
-    };
+    });
 
-    users.push(newUser);
-    writeUsers(users);
+    await newUser.save();
 
+    // Token carries the real Mongo _id — matches the ObjectId type every
+    // other schema's userId field expects.
     const token = jwt.sign(
-      { id: newUser.id, email: newUser.email },
+      { id: newUser._id, email: newUser.email },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
 
-    // ✅ Cookie settings – dynamic for production
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
+    res.cookie('token', token, COOKIE_OPTIONS);
 
     res.status(201).json({
-      user: { id: newUser.id, name: newUser.name, email: newUser.email }
+      user: { id: newUser._id, name: newUser.name, email: newUser.email }
     });
   } catch (err) {
     console.error('Register error:', err);
@@ -78,7 +63,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// ========== LOGIN – direct JWT (no OTP) ==========
+// ========== LOGIN (JWT only, no OTP) ==========
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -86,9 +71,9 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Email and password required' });
     }
 
-    const users = readUsers();
-    const user = users.find(u => u.email === email);
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
     if (!user) {
+      // Same message as a wrong password — don't reveal whether the email exists
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
@@ -98,21 +83,15 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user._id, email: user.email },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
 
-    // ✅ Cookie settings – dynamic for production
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
+    res.cookie('token', token, COOKIE_OPTIONS);
 
     res.json({
-      user: { id: user.id, name: user.name, email: user.email }
+      user: { id: user._id, name: user.name, email: user.email }
     });
   } catch (err) {
     console.error('Login error:', err);
@@ -123,12 +102,13 @@ exports.login = async (req, res) => {
 // ========== GET PROFILE (protected) ==========
 exports.getProfile = async (req, res) => {
   try {
-    const users = readUsers();
-    const user = users.find(u => u.id === req.user.id);
+    // .select('-password') keeps the hash out of the response entirely,
+    // rather than fetching it and remembering to strip it manually.
+    const user = await User.findById(req.user.id).select('-password');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.json({ id: user.id, name: user.name, email: user.email });
+    res.json({ id: user._id, name: user.name, email: user.email });
   } catch (err) {
     console.error('Get profile error:', err);
     res.status(500).json({ message: 'Server error' });
@@ -137,6 +117,8 @@ exports.getProfile = async (req, res) => {
 
 // ========== LOGOUT ==========
 exports.logout = (req, res) => {
+  // Must pass the SAME options used when setting the cookie (minus maxAge)
+  // or some browsers won't actually clear it.
   res.clearCookie('token', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',

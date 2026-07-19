@@ -1,55 +1,35 @@
-const fs = require('fs');
-const path = require('path');
+const Project = require('../models/Projects');
 
-const projectsPath = path.join(__dirname, '../data/projects.json');
-
-const readProjects = () => {
+// ─── PUBLIC: get all projects (no userId filter) ───
+exports.getProjects = async (req, res) => {
   try {
-    if (!fs.existsSync(projectsPath)) {
-      fs.writeFileSync(projectsPath, JSON.stringify([]), 'utf8');
-      return [];
-    }
-    const data = fs.readFileSync(projectsPath, 'utf8');
-    if (!data || data.trim() === '') {
-      return []; 
-    }
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-};
-const writeProjects = (data) => {
-  fs.writeFileSync(projectsPath, JSON.stringify(data, null, 2), 'utf8');
-};
-
-// GET all projects (public)
-exports.getProjects = (req, res) => {
-  try {
-    const projects = readProjects();
+    const projects = await Project.find().sort({ createdAt: -1 });
     res.json(projects);
   } catch (err) {
+    console.error('Get projects error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// GET single project by id (public)
-exports.getProjectById = (req, res) => {
+// ─── PUBLIC: get a single project by ID ───
+exports.getProjectById = async (req, res) => {
   try {
     const { id } = req.params;
-    const projects = readProjects();
-    const project = projects.find(p => p.id === id);
+    const project = await Project.findOne({ id });
     if (!project) {
       return res.status(404).json({ message: 'Project not found' });
     }
     res.json(project);
   } catch (err) {
+    console.error('Get project by ID error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// POST new project (admin only)
+// ─── PROTECTED: add a new project ───
 exports.addProject = async (req, res) => {
   try {
+    const userId = req.user.id; 
     const { title, client, shortDescription, longDescription, procedure, location, year } = req.body;
     const imageFile = req.file;
 
@@ -57,9 +37,9 @@ exports.addProject = async (req, res) => {
       return res.status(400).json({ message: 'Title, client, and short description are required' });
     }
 
-    const projects = readProjects();
-    const newProject = {
+    const newProject = new Project({
       id: Date.now().toString(),
+      userId,                       // ✅ added
       title,
       client,
       image: imageFile ? `/uploads/${imageFile.filename}` : '',
@@ -68,65 +48,61 @@ exports.addProject = async (req, res) => {
       procedure: procedure || '',
       location: location || '',
       year: year || ''
-    };
+    });
 
-    projects.push(newProject);
-    writeProjects(projects);
+    await newProject.save();
     res.status(201).json(newProject);
   } catch (err) {
+    console.error('Add project error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// UPDATE project (admin only)
+// ─── PROTECTED: update a project ───
 exports.updateProject = async (req, res) => {
   try {
+    const userId = req.user.id;  // ✅ from JWT
     const { id } = req.params;
     const { title, client, shortDescription, longDescription, procedure, location, year } = req.body;
     const imageFile = req.file;
 
-    const projects = readProjects();
-    const index = projects.findIndex(p => p.id === id);
-    if (index === -1) {
-      return res.status(404).json({ message: 'Project not found' });
+    // ✅ Only allow update if the project belongs to the logged‑in user
+    const project = await Project.findOne({ id, userId });
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found or unauthorized' });
     }
 
-    const current = projects[index];
-    let image = current.image;
-    if (imageFile) image = `/uploads/${imageFile.filename}`;
+    if (title) project.title = title;
+    if (client) project.client = client;
+    if (shortDescription) project.shortDescription = shortDescription;
+    if (longDescription !== undefined) project.longDescription = longDescription;
+    if (procedure !== undefined) project.procedure = procedure;
+    if (location !== undefined) project.location = location;
+    if (year !== undefined) project.year = year;
+    if (imageFile) project.image = `/uploads/${imageFile.filename}`;
 
-    const updated = {
-      ...current,
-      title: title || current.title,
-      client: client || current.client,
-      image,
-      shortDescription: shortDescription || current.shortDescription,
-      longDescription: longDescription || current.longDescription,
-      procedure: procedure || current.procedure,
-      location: location || current.location,
-      year: year || current.year
-    };
-
-    projects[index] = updated;
-    writeProjects(projects);
-    res.json(updated);
+    await project.save();
+    res.json(project);
   } catch (err) {
+    console.error('Update project error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// DELETE project (admin only)
-exports.deleteProject = (req, res) => {
+// ─── PROTECTED: delete a project ───
+exports.deleteProject = async (req, res) => {
   try {
+    const userId = req.user.id;  // ✅ from JWT
     const { id } = req.params;
-    const projects = readProjects();
-    const filtered = projects.filter(p => p.id !== id);
-    if (filtered.length === projects.length) {
-      return res.status(404).json({ message: 'Project not found' });
+
+    // ✅ Only delete if the project belongs to the logged‑in user
+    const result = await Project.deleteOne({ id, userId });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Project not found or unauthorized' });
     }
-    writeProjects(filtered);
     res.json({ message: 'Project deleted successfully' });
   } catch (err) {
+    console.error('Delete project error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };

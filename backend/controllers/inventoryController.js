@@ -1,53 +1,28 @@
-const fs = require('fs');
-const path = require('path');
+const Product = require('../models/Products');
 
-const inventoryPath = path.join(__dirname, '../data/inventory.json');
-
-// Helper: read inventory
-const readInventory = () => {
+// ─── PUBLIC: get all products ───
+exports.getProducts = async (req, res) => {
   try {
-    if (!fs.existsSync(inventoryPath)) {
-      fs.writeFileSync(inventoryPath, JSON.stringify([]), 'utf8');
-      return [];
-    }
-    const data = fs.readFileSync(inventoryPath, 'utf8');
-    return JSON.parse(data);
-  } catch (err) {
-    console.error('Error reading inventory:', err);
-    return [];
-  }
-};
-// Helper: write inventory
-const writeInventory = (data) => {
-  fs.writeFileSync(inventoryPath, JSON.stringify(data, null, 2), 'utf8');
-};
-
-// GET /api/inventory – get all products for public
-exports.getProducts = (req, res) => {
-  try {
-    const inventory = readInventory();
-    res.json(inventory);
+    const products = await Product.find().sort({ createdAt: -1 });
+    res.json(products);
   } catch (err) {
     console.error('Get products error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-
-// ADD PRODUCT – with image upload
+// ─── PROTECTED: add a new product ───
 exports.addProduct = async (req, res) => {
   try {
     const userId = req.user.id;
     const { name, price, description, status } = req.body;
-    // Multer puts the file in req.file
     const imageFile = req.file;
 
     if (!name || !price || !description) {
       return res.status(400).json({ message: 'Name, price, and description are required' });
     }
 
-    const inventory = readInventory();
-    const newProduct = {
+    const newProduct = new Product({
       id: Date.now().toString(),
       userId,
       name,
@@ -55,13 +30,11 @@ exports.addProduct = async (req, res) => {
       description,
       status: status || 'normal',
       image: imageFile ? `/uploads/${imageFile.filename}` : '',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
 
-    inventory.push(newProduct);
-    writeInventory(inventory);
-
+    await newProduct.save();
     res.status(201).json(newProduct);
   } catch (err) {
     console.error('Add product error:', err);
@@ -69,7 +42,7 @@ exports.addProduct = async (req, res) => {
   }
 };
 
-// UPDATE PRODUCT – handle image change
+// ─── PROTECTED: update a product ───
 exports.updateProduct = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -77,56 +50,36 @@ exports.updateProduct = async (req, res) => {
     const { name, price, description, status } = req.body;
     const imageFile = req.file;
 
-    const inventory = readInventory();
-    const index = inventory.findIndex(item => item.id === productId && item.userId === userId);
-
-    if (index === -1) {
+    const product = await Product.findOne({ id: productId, userId });
+    if (!product) {
       return res.status(404).json({ message: 'Product not found or unauthorized' });
     }
 
-    const current = inventory[index];
+    if (name) product.name = name;
+    if (price) product.price = parseFloat(price);
+    if (description) product.description = description;
+    if (status) product.status = status;
+    if (imageFile) product.image = `/uploads/${imageFile.filename}`;
+    product.updatedAt = new Date();
 
-    // If a new image is uploaded, replace the old one (optional: delete old file)
-    let image = current.image;
-    if (imageFile) {
-      image = `/uploads/${imageFile.filename}`;
-      // Optional: delete old file from disk (not implemented for simplicity)
-    }
-
-    const updatedProduct = {
-      ...current,
-      name: name || current.name,
-      price: price ? parseFloat(price) : current.price,
-      description: description || current.description,
-      status: status || current.status,
-      image: image,
-      updatedAt: new Date().toISOString()
-    };
-
-    inventory[index] = updatedProduct;
-    writeInventory(inventory);
-
-    res.json(updatedProduct);
+    await product.save();
+    res.json(product);
   } catch (err) {
     console.error('Update product error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
-    
-// DELETE /api/inventory/:id – delete a product
-exports.deleteProduct = (req, res) => {
+
+// ─── PROTECTED: delete a product ───
+exports.deleteProduct = async (req, res) => {
   try {
     const userId = req.user.id;
     const productId = req.params.id;
 
-    const inventory = readInventory();
-    const filtered = inventory.filter(item => !(item.id === productId && item.userId === userId));
-
-    if (filtered.length === inventory.length) {
+    const result = await Product.deleteOne({ id: productId, userId });
+    if (result.deletedCount === 0) {
       return res.status(404).json({ message: 'Product not found or unauthorized' });
     }
-
-    writeInventory(filtered);
     res.json({ message: 'Product deleted successfully' });
   } catch (err) {
     console.error('Delete product error:', err);

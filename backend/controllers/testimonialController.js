@@ -1,33 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+// controllers/testimonialController.js
+const Testimonial = require('../models/Testimonials');
+const crypto = require('crypto');
 
-const testimonialsPath = path.join(__dirname, '../data/testimonials.json');
-
-// ── Helpers ──
-const readTestimonials = () => {
+// ─── PUBLIC: get all testimonials, newest first (no userId filter — public sees everyone's) ───
+exports.getTestimonials = async (req, res) => {
   try {
-    if (!fs.existsSync(testimonialsPath)) {
-      fs.writeFileSync(testimonialsPath, JSON.stringify([]), 'utf8');
-      return [];
-    }
-    const data = fs.readFileSync(testimonialsPath, 'utf8');
-    if (!data || data.trim() === '') {
-      return [];  // ✅ Just return empty array, don't overwrite
-    }
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-};
-
-const writeTestimonials = (data) => {
-  fs.writeFileSync(testimonialsPath, JSON.stringify(data, null, 2), 'utf8');
-};
-
-// ─── PUBLIC: get all testimonials ───
-exports.getTestimonials = (req, res) => {
-  try {
-    const testimonials = readTestimonials();
+    const testimonials = await Testimonial.find().sort({ createdAt: -1 });
     res.json(testimonials);
   } catch (err) {
     console.error('Get testimonials error:', err);
@@ -35,28 +13,25 @@ exports.getTestimonials = (req, res) => {
   }
 };
 
-// ─── PROTECTED: add a new testimonial ───
+// ─── PROTECTED: add a new testimonial, tagged with the logged-in user ───
 exports.addTestimonial = async (req, res) => {
   try {
+    const userId = req.user.id;   // from JWT
     const { name, location, text } = req.body;
 
     if (!name || !text) {
       return res.status(400).json({ message: 'Name and testimonial text are required' });
     }
 
-    const testimonials = readTestimonials();
-    const newTestimonial = {
-      id: Date.now().toString(),
+    const newTestimonial = new Testimonial({
+      id: crypto.randomUUID(),
+      userId,
       name,
       location: location || '',
-      text,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+      text
+    });
 
-    testimonials.push(newTestimonial);
-    writeTestimonials(testimonials);
-
+    await newTestimonial.save();
     res.status(201).json(newTestimonial);
   } catch (err) {
     console.error('Add testimonial error:', err);
@@ -64,47 +39,40 @@ exports.addTestimonial = async (req, res) => {
   }
 };
 
-// ─── PROTECTED: update a testimonial ───
+// ─── PROTECTED: update — only the user who added it can edit it ───
 exports.updateTestimonial = async (req, res) => {
   try {
+    const userId = req.user.id;
     const { id } = req.params;
     const { name, location, text } = req.body;
 
-    const testimonials = readTestimonials();
-    const index = testimonials.findIndex(t => t.id === id);
-    if (index === -1) {
-      return res.status(404).json({ message: 'Testimonial not found' });
+    const testimonial = await Testimonial.findOne({ id, userId });
+    if (!testimonial) {
+      return res.status(404).json({ message: 'Testimonial not found or unauthorized' });
     }
 
-    const current = testimonials[index];
-    const updated = {
-      ...current,
-      name: name || current.name,
-      location: location !== undefined ? location : current.location,
-      text: text || current.text,
-      updatedAt: new Date().toISOString()
-    };
+    if (name) testimonial.name = name;
+    if (location !== undefined) testimonial.location = location;
+    if (text) testimonial.text = text;
 
-    testimonials[index] = updated;
-    writeTestimonials(testimonials);
-
-    res.json(updated);
+    await testimonial.save();
+    res.json(testimonial);
   } catch (err) {
     console.error('Update testimonial error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// ─── PROTECTED: delete a testimonial ───
-exports.deleteTestimonial = (req, res) => {
+// ─── PROTECTED: delete — only the user who added it can delete it ───
+exports.deleteTestimonial = async (req, res) => {
   try {
+    const userId = req.user.id;
     const { id } = req.params;
-    const testimonials = readTestimonials();
-    const filtered = testimonials.filter(t => t.id !== id);
-    if (filtered.length === testimonials.length) {
-      return res.status(404).json({ message: 'Testimonial not found' });
+
+    const result = await Testimonial.deleteOne({ id, userId });   // scoped
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Testimonial not found or unauthorized' });
     }
-    writeTestimonials(filtered);
     res.json({ message: 'Testimonial deleted successfully' });
   } catch (err) {
     console.error('Delete testimonial error:', err);

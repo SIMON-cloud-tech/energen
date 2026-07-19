@@ -48,7 +48,6 @@ const Dashboard = ({ setUser }) => {
           credentials: 'include' // sends the httpOnly cookie
         });
         if (!res.ok) {
-          // If not authenticated, redirect to login
           if (res.status === 401) {
             navigate('/auth');
             return;
@@ -79,7 +78,6 @@ const Dashboard = ({ setUser }) => {
     navigate('/auth');
   };
 
-  // Render the correct component based on active menu item
   const renderContentPanel = () => {
     switch (activeMenuItem) {
       case 'products':
@@ -101,25 +99,23 @@ const Dashboard = ({ setUser }) => {
 
   const activeLabel = menuItems.find((item) => item.id === activeMenuItem)?.label || 'Dashboard';
 
-
-   // ── Time‑based greeting ──
-      const getGreeting = () => {
-      const hour = new Date().getHours();
-      if (hour < 12) return 'Good Morning';
-      if (hour < 17) return 'Good Afternoon';
-      return 'Good Evening'; 
-     };
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    return 'Good Evening'; 
+  };
 
   return (
     <div className={`dashboard ${theme}`}>
-      {/* Mobile hamburger */}
-      <button
-        className="mobile-hamburger"
-        onClick={toggleMobileSidebar}
-        aria-label={mobileSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+     {/* Mobile top bar — full-width strip that houses the hamburger */}
+    <div className="mobile-topbar">
+     <button className="mobile-hamburger" onClick={toggleMobileSidebar}
+       aria-label={mobileSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
       >
-        {mobileSidebarOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-      </button>
+      {mobileSidebarOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+     </button>
+    </div>
 
       {/* Sidebar overlay */}
       <div
@@ -169,13 +165,15 @@ const Dashboard = ({ setUser }) => {
 
       {/* Main content */}
       <main className="dashboard-main">
-        <section className="dashboard-row">
+        {/* Welcome banner — fixed row, never scrolls, never shrinks */}
+        <section className="dashboard-row dashboard-row-fixed">
           <div className="welcome-banner">
             <h1 className="welcome-title">{getGreeting()},  {profile?.name || 'User'}! 👋</h1>
           </div>
         </section>
 
-        <section className="dashboard-row">
+        {/* Content panel — the ONLY part of the page that scrolls internally */}
+        <section className="dashboard-row dashboard-row-scrollable">
           <div className="content-panel full-width">
             <h3>{activeLabel}</h3>
             {renderContentPanel()}
@@ -183,10 +181,10 @@ const Dashboard = ({ setUser }) => {
         </section>
 
         <footer className="dashboard-footer">
-         <p>© {new Date().getFullYear()} Energen Systems &amp; General Supplies Ltd. All Rights Reserved.</p>
-        <Link to="/" className="dashboard-footer-link">
-         <p>Energy That Cares ☀️</p>
-        </Link>
+          <p>© {new Date().getFullYear()} Energen Systems &amp; General Supplies Ltd. All Rights Reserved.</p>
+          <Link to="/" className="dashboard-footer-link">
+            <p>Energy That Cares ☀️</p>
+          </Link>
         </footer>
       </main>
     </div>

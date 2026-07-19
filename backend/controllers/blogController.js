@@ -1,32 +1,9 @@
-const fs = require('fs');
-const path = require('path');
+const Blog = require('../models/Blogs');
 
-const blogsPath = path.join(__dirname, '../data/blogs.json');
-
-const readBlogs = () => {
+// ─── PUBLIC: get all blogs ───
+exports.getBlogs = async (req, res) => {
   try {
-    if (!fs.existsSync(blogsPath)) {
-      fs.writeFileSync(blogsPath, JSON.stringify([]), 'utf8');
-      return [];
-    }
-    const data = fs.readFileSync(blogsPath, 'utf8');
-    // ✅ Remove the empty file check – just parse it
-    return JSON.parse(data);
-  } catch (err) {
-    console.error('Error reading blogs:', err);
-    // ❌ Don't overwrite on error – just return empty array
-    return [];
-  }
-};
-
-const writeBlogs = (data) => {
-  fs.writeFileSync(blogsPath, JSON.stringify(data, null, 2), 'utf8');
-};
-
-// ─── PUBLIC: get all blogs (no userId filter) ───
-exports.getBlogs = (req, res) => {
-  try {
-    const blogs = readBlogs();
+    const blogs = await Blog.find().sort({ createdAt: -1 });
     res.json(blogs);
   } catch (err) {
     console.error('Get blogs error:', err);
@@ -35,11 +12,10 @@ exports.getBlogs = (req, res) => {
 };
 
 // ─── PUBLIC: get a single blog by ID ───
-exports.getBlogById = (req, res) => {
+exports.getBlogById = async (req, res) => {
   try {
     const { id } = req.params;
-    const blogs = readBlogs();
-    const blog = blogs.find(b => b.id === id);
+    const blog = await Blog.findOne({ id });
     if (!blog) {
       return res.status(404).json({ message: 'Blog not found' });
     }
@@ -50,7 +26,7 @@ exports.getBlogById = (req, res) => {
   }
 };
 
-// ─── PROTECTED: add a new blog (admin only) ───
+// ─── PROTECTED: add a new blog ───
 exports.addBlog = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -61,21 +37,18 @@ exports.addBlog = async (req, res) => {
       return res.status(400).json({ message: 'Title and description are required' });
     }
 
-    const blogs = readBlogs();
-    const newBlog = {
+    const newBlog = new Blog({
       id: Date.now().toString(),
       userId,
       title,
       description,
       keywords: keywords || '',
       image: imageFile ? `/uploads/${imageFile.filename}` : '',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
 
-    blogs.push(newBlog);
-    writeBlogs(blogs);
-
+    await newBlog.save();
     res.status(201).json(newBlog);
   } catch (err) {
     console.error('Add blog error:', err);
@@ -83,7 +56,7 @@ exports.addBlog = async (req, res) => {
   }
 };
 
-// ─── PROTECTED: update a blog (admin only) ───
+// ─── PROTECTED: update a blog ───
 exports.updateBlog = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -91,50 +64,35 @@ exports.updateBlog = async (req, res) => {
     const { title, description, keywords } = req.body;
     const imageFile = req.file;
 
-    const blogs = readBlogs();
-    const index = blogs.findIndex(b => b.id === blogId && b.userId === userId);
-    if (index === -1) {
+    const blog = await Blog.findOne({ id: blogId, userId });
+    if (!blog) {
       return res.status(404).json({ message: 'Blog not found or unauthorized' });
     }
 
-    const current = blogs[index];
-    let image = current.image;
-    if (imageFile) {
-      image = `/uploads/${imageFile.filename}`;
-    }
+    if (title) blog.title = title;
+    if (description) blog.description = description;
+    if (keywords !== undefined) blog.keywords = keywords;
+    if (imageFile) blog.image = `/uploads/${imageFile.filename}`;
+    blog.updatedAt = new Date();
 
-    const updated = {
-      ...current,
-      title: title || current.title,
-      description: description || current.description,
-      keywords: keywords !== undefined ? keywords : current.keywords,
-      image,
-      updatedAt: new Date().toISOString()
-    };
-
-    blogs[index] = updated;
-    writeBlogs(blogs);
-
-    res.json(updated);
+    await blog.save();
+    res.json(blog);
   } catch (err) {
     console.error('Update blog error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// ─── PROTECTED: delete a blog (admin only) ───
+// ─── PROTECTED: delete a blog ───
 exports.deleteBlog = async (req, res) => {
   try {
     const userId = req.user.id;
     const blogId = req.params.id;
 
-    const blogs = readBlogs();
-    const filtered = blogs.filter(b => !(b.id === blogId && b.userId === userId));
-    if (filtered.length === blogs.length) {
+    const result = await Blog.deleteOne({ id: blogId, userId });
+    if (result.deletedCount === 0) {
       return res.status(404).json({ message: 'Blog not found or unauthorized' });
     }
-
-    writeBlogs(filtered);
     res.json({ message: 'Blog deleted successfully' });
   } catch (err) {
     console.error('Delete blog error:', err);
