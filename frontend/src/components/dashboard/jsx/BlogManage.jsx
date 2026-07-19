@@ -36,7 +36,6 @@ const BlogManage = () => {
     fetchBlogs();
   }, []);
 
-  // ── Form handling ──
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -49,7 +48,6 @@ const BlogManage = () => {
     }
   };
 
-  // ── Submit (add / update) ──
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -67,8 +65,6 @@ const BlogManage = () => {
         credentials: 'include',
         body: form
       });
-      console.log('🔵 Response status:', res.status);  // <-- add this
-      console.log('🔵 Response:', await res.text()); 
 
       if (!res.ok) throw new Error('Failed to save');
       await fetchBlogs();
@@ -85,7 +81,6 @@ const BlogManage = () => {
     setPreviewUrl('');
   };
 
-  // ── Delete ──
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this blog post?')) return;
     try {
@@ -100,7 +95,6 @@ const BlogManage = () => {
     }
   };
 
-  // ── Edit – populate form ──
   const handleEdit = (blog) => {
     setEditingId(blog.id);
     setFormData({
@@ -113,14 +107,12 @@ const BlogManage = () => {
     setShowForm(true);
   };
 
-  // ── Cancel ──
   const handleCancel = () => {
     setShowForm(false);
     setEditingId(null);
     resetForm();
   };
 
-  // ── Load more ──
   const loadMore = () => setVisibleCount(prev => prev + 3);
 
   const visibleBlogs = blogs.slice(0, visibleCount);
@@ -129,8 +121,8 @@ const BlogManage = () => {
   if (loading) return <div className="blog-loading">Loading blogs...</div>;
 
   return (
-    <div className="blog-manage">
-      <div className="blog-header">
+    <div className="project-manage">  {/* Using project-manage class */}
+      <div className="project-header">  {/* Using project-header */}
         <div className="header-actions">
           {hasMore && (
             <button className="load-more-btn" onClick={loadMore}>
@@ -144,23 +136,25 @@ const BlogManage = () => {
       </div>
 
       {/* Blog Cards Grid */}
-      <div className="blog-grid">
+      <div className="project-grid">  {/* Using project-grid */}
         {visibleBlogs.map((blog) => (
-          <div key={blog.id} className="blog-card">
-            <div className="blog-image">
+          <div key={blog.id} className="project-card">  {/* Using project-card */}
+            <div className="project-image">  {/* Using project-image */}
               {blog.image ? (
-                <img src={`${import.meta.env.VITE_IMAGE_BASE_URL || ''}${blog.image}`}  alt={blog.title} />
+                <img src={`${import.meta.env.VITE_IMAGE_BASE_URL || ''}${blog.image}`} alt={blog.title} />
               ) : (
                 <div className="placeholder-image">No Image</div>
               )}
             </div>
-            <div className="blog-info">
+            <div className="project-info">  {/* Using project-info */}
               <h3>{blog.title}</h3>
-              <p className="blog-description">
+              {/* Using project-short as description (blogs have only one description field) */}
+              <p className="project-short">
                 {blog.description && blog.description.length > 100
                   ? `${blog.description.substring(0, 100)}...`
                   : blog.description}
               </p>
+              {/* Keeping keyword classes as is – specific to blogs */}
               {blog.keywords && (
                 <div className="blog-keywords">
                   {blog.keywords.split(',').map((kw, i) => (
@@ -169,7 +163,7 @@ const BlogManage = () => {
                 </div>
               )}
             </div>
-            <div className="blog-actions">
+            <div className="project-actions">  {/* Using project-actions */}
               <button className="edit-btn" onClick={() => handleEdit(blog)}>
                 <FiEdit /> Edit
               </button>
@@ -182,7 +176,7 @@ const BlogManage = () => {
       </div>
 
       {visibleBlogs.length === 0 && (
-        <div className="no-blogs">
+        <div className="no-projects">  {/* Using no-projects */}
           <p>No blog posts yet. Click "Write Blog" to create one.</p>
         </div>
       )}
