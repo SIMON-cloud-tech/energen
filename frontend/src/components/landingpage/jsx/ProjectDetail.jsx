@@ -33,7 +33,7 @@ const ProjectDetail = () => {
       <div className="project-detail-content">
         <div className="project-detail-image">
           {project.image ? (
-            <img src={`${import.meta.env.VITE_IMAGE_BASE_URL || ''}${project.image}`} alt={project.title} />
+           <img src={project.image}  alt={project.title} />
           ) : (
             <div className="placeholder-image">No Image</div>
           )}

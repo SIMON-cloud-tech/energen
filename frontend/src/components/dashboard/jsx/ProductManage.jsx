@@ -152,7 +152,7 @@ const ProductManage = () => {
           <div key={product.id} className="product-card">
             <div className="product-image">
               {product.image ? (
-                <img src={`${import.meta.env.VITE_IMAGE_BASE_URL || ''}${product.image}`}  alt={product.name} />
+                <img src={product.image} alt={product.name} />
               ) : (
                 <div className="placeholder-image">No Image</div>
               )}

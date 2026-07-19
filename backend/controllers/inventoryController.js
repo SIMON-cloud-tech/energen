@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+const uploadToCloudinary = require('../utils/uploadToCloudinary');
 const Product = require('../models/Products');
 
 // ─── PUBLIC: get all products ───
@@ -22,16 +24,21 @@ exports.addProduct = async (req, res) => {
       return res.status(400).json({ message: 'Name, price, and description are required' });
     }
 
+    // ── Upload image to Cloudinary if provided ──
+    let imageUrl = '';
+    if (imageFile) {
+      imageUrl = await uploadToCloudinary(imageFile.path, 'energen/products');
+    }
+
+
     const newProduct = new Product({
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       userId,
       name,
       price: parseFloat(price),
       description,
       status: status || 'normal',
-      image: imageFile ? `/uploads/${imageFile.filename}` : '',
-      createdAt: new Date(),
-      updatedAt: new Date()
+      image: imageUrl,    
     });
 
     await newProduct.save();
@@ -59,8 +66,11 @@ exports.updateProduct = async (req, res) => {
     if (price) product.price = parseFloat(price);
     if (description) product.description = description;
     if (status) product.status = status;
-    if (imageFile) product.image = `/uploads/${imageFile.filename}`;
-    product.updatedAt = new Date();
+    
+        // ── If a new image is uploaded, upload to Cloudinary ──
+    if (imageFile) {
+      product.image = await uploadToCloudinary(imageFile.path, 'energen/products');
+    }
 
     await product.save();
     res.json(product);

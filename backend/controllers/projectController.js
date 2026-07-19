@@ -37,12 +37,18 @@ exports.addProject = async (req, res) => {
       return res.status(400).json({ message: 'Title, client, and short description are required' });
     }
 
+    // ── Upload image to Cloudinary if provided ──
+    let imageUrl = '';
+    if (imageFile) {
+      imageUrl = await uploadToCloudinary(imageFile.path, 'energen/projects');
+    }
+
     const newProject = new Project({
-      id: Date.now().toString(),
+       id: crypto.randomUUID(),
       userId,                       // ✅ added
       title,
       client,
-      image: imageFile ? `/uploads/${imageFile.filename}` : '',
+      image: imageUrl,    
       shortDescription,
       longDescription: longDescription || '',
       procedure: procedure || '',
@@ -79,7 +85,11 @@ exports.updateProject = async (req, res) => {
     if (procedure !== undefined) project.procedure = procedure;
     if (location !== undefined) project.location = location;
     if (year !== undefined) project.year = year;
-    if (imageFile) project.image = `/uploads/${imageFile.filename}`;
+    
+   // ── If a new image is uploaded, upload to Cloudinary ──
+    if (imageFile) {
+      project.image = await uploadToCloudinary(imageFile.path, 'energen/projects');
+    }
 
     await project.save();
     res.json(project);

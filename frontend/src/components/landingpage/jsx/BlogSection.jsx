@@ -96,7 +96,7 @@ const BlogSection = () => {
               <div key={blog.id} className="blog-card">
                 <div className="blog-image">
                   {blog.image ? (
-                    <img src={`${import.meta.env.VITE_IMAGE_BASE_URL || ''}${blog.image}`}  alt={blog.title} />
+                     <img src={blog.image} alt={blog.title} />
                   ) : (
                     <div className="placeholder-image">No Image</div>
                   )}

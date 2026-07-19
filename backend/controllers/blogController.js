@@ -1,4 +1,6 @@
+const crypto = require('crypto');
 const Blog = require('../models/Blogs');
+const uploadToCloudinary = require('../utils/uploadToCloudinary');
 
 // ─── PUBLIC: get all blogs ───
 exports.getBlogs = async (req, res) => {
@@ -37,15 +39,20 @@ exports.addBlog = async (req, res) => {
       return res.status(400).json({ message: 'Title and description are required' });
     }
 
+    // ── Upload image to Cloudinary if provided ──
+    let imageUrl = '';
+    if (imageFile) {
+      imageUrl = await uploadToCloudinary(imageFile.path, 'energen/blogs');
+    }
+
+
     const newBlog = new Blog({
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       userId,
       title,
       description,
       keywords: keywords || '',
-      image: imageFile ? `/uploads/${imageFile.filename}` : '',
-      createdAt: new Date(),
-      updatedAt: new Date()
+      image: imageUrl,
     });
 
     await newBlog.save();
@@ -72,8 +79,11 @@ exports.updateBlog = async (req, res) => {
     if (title) blog.title = title;
     if (description) blog.description = description;
     if (keywords !== undefined) blog.keywords = keywords;
-    if (imageFile) blog.image = `/uploads/${imageFile.filename}`;
-    blog.updatedAt = new Date();
+
+    if (imageFile) {
+      blog.image = await uploadToCloudinary(imageFile.path, 'energen/blogs');
+    }
+    
 
     await blog.save();
     res.json(blog);
