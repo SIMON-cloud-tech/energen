@@ -2,6 +2,7 @@ const { Resend } = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// ✅ Use Resend's default testing domain (works for emails to yourself)
 const FROM_EMAIL = 'onboarding@resend.dev';
 const FROM_NAME = 'Energen Solar';
 
@@ -11,7 +12,7 @@ const sendOTPEmail = async (email, otp, purpose = 'password reset') => {
   try {
     const { data, error } = await resend.emails.send({
       from: `${FROM_NAME} <${FROM_EMAIL}>`,
-      to: email,
+      to: email,  // You can ONLY send to YOUR OWN email (simonmbithi143@gmail.com)
       subject: `Energen - ${purpose.charAt(0).toUpperCase() + purpose.slice(1)} OTP`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto;">
