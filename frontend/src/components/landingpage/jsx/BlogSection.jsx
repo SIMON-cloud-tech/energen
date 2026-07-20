@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import SEO from '../../SEO/Seo';
 import '../css/BlogSection.css';
 
 const BlogSection = () => {
@@ -47,7 +48,13 @@ const BlogSection = () => {
   if (loading) return <div className="blog-loading">Loading articles...</div>;
 
   return (
-    <section className="blog-section">
+    <>
+      <SEO
+        title="Solar Insights & News"
+        description="Read Energen's latest solar industry insights, energy-saving tips, and renewable energy news for Kenya."
+        keywords="solar blog, renewable energy blog, solar news Kenya, energy tips"
+      />
+      <section className="blog-section">
       {/* TOP ROW: Title + Load More */}
       <div className="blog-header">
         <div className='blog-head'>
@@ -128,6 +135,7 @@ const BlogSection = () => {
         </>
       )}
     </section>
+    </>
   );
 };
 

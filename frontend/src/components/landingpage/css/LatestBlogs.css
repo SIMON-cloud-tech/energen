@@ -8,7 +8,7 @@
   min-height: 500px;
   
   /* ── Background image ── */
-  background-image: url('../../../../public/solarbg.jpeg');
+  background-image: url('/solarbg.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import SEO from '../../SEO/Seo';
 import '../css/Projects.css';
 
 const Projects = () => {
@@ -50,9 +51,15 @@ const Projects = () => {
   if (loading) return <div className="projects-loading">Loading projects...</div>;
 
   return (
-    <section className="projects-page">
-      {/* Header row: title left, load more right */}
-      <div className="projects-header">
+    <>
+      <SEO
+        title="Solar Projects in Kenya"
+        description="Explore completed Energen solar installations, from residential rooftops to commercial solar systems across Kenya."
+        keywords="solar projects Kenya, solar installation portfolio, renewable energy case studies"
+      />
+      <section className="projects-page">
+        {/* Header row: title left, load more right */}
+        <div className="projects-header">
         <h2>Our Projects</h2>
         {hasMore && (
           <button className="load-more-btn" onClick={loadMore}>
@@ -102,6 +109,7 @@ const Projects = () => {
         </div>
       )}
     </section>
+    </>
   );
 };
 

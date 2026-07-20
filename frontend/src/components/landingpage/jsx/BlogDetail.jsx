@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import SEO from '../../SEO/Seo';
 import '../css/BlogDetail.css';
 
 const BlogDetail = () => {
@@ -28,7 +29,14 @@ const BlogDetail = () => {
   if (!blog) return <div className="blog-detail-notfound">Article not found</div>;
 
   return (
-    <div className="blog-detail">
+    <>
+      <SEO
+        title={blog.title}
+        description={blog.description || 'Energen solar insights and article details.'}
+        ogImage={blog.image}
+        keywords={blog.keywords || 'solar blog, renewable energy, Kenya'}
+      />
+      <div className="blog-detail">
       {/* Hero / Image */}
       {blog.image && (
         <div className="blog-detail-hero">
@@ -57,6 +65,7 @@ const BlogDetail = () => {
         </button>
       </div>
     </div>
+    </>
   );
 };
 

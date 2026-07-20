@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { addToCart } from '../../../utils/CartUtil';
+import SEO from '../../SEO/Seo';
 import '../css/Products.css';
 
 const Products = () => {
@@ -54,20 +55,26 @@ const Products = () => {
   if (loading) return <div className="products-loading">Loading products...</div>;
 
   return (
-    <div className="products-page">
-      <div className="products-header">
-        <h2>Our Products</h2>
-        <p>Our solar products are engineered for Kenyan conditions – stable output, weather‑resistant, and backed by expert support. Choose quality that pays for itself.
-        </p>
-        <h4>Reliable, durable, and built to last</h4>
-        <div className="searchbar">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+    <>
+      <SEO
+        title="Solar Products for Kenya"
+        description="Browse Energen's solar product range, including panels, batteries, and energy systems built for Kenyan homes and businesses."
+        keywords="solar products Kenya, solar panels, battery storage, renewable energy products"
+      />
+      <div className="products-page">
+        <div className="products-header">
+          <h2>Our Products</h2>
+          <p>Our solar products are engineered for Kenyan conditions – stable output, weather‑resistant, and backed by expert support. Choose quality that pays for itself.
+          </p>
+          <h4>Reliable, durable, and built to last</h4>
+          <div className="searchbar">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
           {hasMore && (
             <button className="load-more-btn" onClick={loadMore}>
@@ -76,42 +83,43 @@ const Products = () => {
           )}
         </div>
 
-      <div className="products-grid">
-        {visibleProducts.map((product) => (
-          <div key={product.id} className="product-card">
-            {product.status === 'offer' && (
-              <span className="offer-badge">🔥 Offer</span>
-            )}
-            <div className="product-image">
-              {product.image ? (
-                <img src={product.image} alt={product.name} />
-              ) : (
-                <div className="placeholder-image">No Image</div>
+        <div className="products-grid">
+          {visibleProducts.map((product) => (
+            <div key={product.id} className="product-card">
+              {product.status === 'offer' && (
+                <span className="offer-badge">🔥 Offer</span>
               )}
+              <div className="product-image">
+                {product.image ? (
+                  <img src={product.image} alt={product.name} />
+                ) : (
+                  <div className="placeholder-image">No Image</div>
+                )}
+              </div>
+              <div className="product-info">
+                <h3>{product.name}</h3>
+                <p className="product-description">{product.description}</p>
+                <p className="product-price">KSH {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              </div>
+              <div className="product-actions">
+                <button
+                  className="add-to-cart-btn"
+                  onClick={() => handleAddToCart(product)}
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
-            <div className="product-info">
-              <h3>{product.name}</h3>
-              <p className="product-description">{product.description}</p>
-              <p className="product-price">KSH {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-            </div>
-            <div className="product-actions">
-              <button
-                className="add-to-cart-btn"
-                onClick={() => handleAddToCart(product)}
-              >
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {visibleProducts.length === 0 && (
-        <div className="no-products">
-          <p>No products found.</p>
+          ))}
         </div>
-      )}
-    </div>
+
+        {visibleProducts.length === 0 && (
+          <div className="no-products">
+            <p>No products found.</p>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

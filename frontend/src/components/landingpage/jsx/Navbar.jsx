@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FiShoppingCart, FiMenu, FiX, FiSettings } from 'react-icons/fi';
 import Cart from './Cart';
 import '../css/Navbar.css';
+import LogoImage from '../../../../public/logo.png'
 
 const MENU_ITEMS = [
   { label: 'Home', path: '/' },
@@ -28,6 +29,7 @@ const Navbar = ({ cart, setCart, cartCount = 0 }) => {
       <nav className="navbar">
         <div className="navbar-container">
           <Link to="/" className="navbar-logo">
+            <img src={LogoImage} alt="Energen Logo" className="navbar-logo-img" />
             <span className="logo-text">Ener<span className="highlight">gen</span></span>
           </Link>
 

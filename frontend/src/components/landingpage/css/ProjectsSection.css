@@ -5,10 +5,11 @@
   margin: 0 auto;
   overflow: hidden;
   position: relative;
+  background-color: #f0f2f5;
    background:
     radial-gradient(circle at top right, rgba(43, 143, 209, 0.08), transparent 28%),
     radial-gradient(circle at bottom left, rgba(26, 42, 108, 0.884), transparent 30%),
-    #0f1a3a;
+     #f0f2f5;
 }
 
 /* ── BRICK WALL BACKGROUND (like contact.css) ── */
@@ -26,15 +27,15 @@
       0deg,
       rgba(243, 156, 18, 0.04) 0px,
       rgba(243, 156, 18, 0.04) 30px,
-      transparent 30px,
+      transparent 100px,
       transparent 32px
     ),
     repeating-linear-gradient(
       90deg,
       rgba(26, 42, 108, 0.03) 0px,
-      rgba(26, 42, 108, 0.03) 60px,
-      transparent 60px,
-      transparent 62px
+      rgba(26, 42, 108, 0.03) 80px,
+      transparent 80px,
+      transparent 80px
     ),
     /* Row 2 - staggered (offset) */
     repeating-linear-gradient(
@@ -65,7 +66,7 @@
   opacity: 1;
 }
 
-/* ── Additional gradient glow (like contact.css) ── */
+/* ── Additional gradient glow */
 .projects-section::after {
   content: '';
   position: absolute;
@@ -74,7 +75,7 @@
   pointer-events: none;
   background:
     radial-gradient(circle at top left, rgba(243, 156, 18, 0.05), transparent 40%),
-    radial-gradient(circle at bottom right, rgba(26, 42, 108, 0.06), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(47, 52, 73, 0.06), transparent 35%),
     radial-gradient(circle at center, rgba(255, 255, 255, 0.02), transparent 30%);
 }
 
@@ -139,7 +140,6 @@
 .project-card {
   background: transparent;
   border-radius: 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s, background 0.3s ease;
   display: flex;
@@ -147,7 +147,6 @@
   opacity: 0;
   animation: zoomIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   position: relative;
-  backdrop-filter: blur(1px);
 }
 
 .project-card:nth-child(1) { animation-delay: 0.05s; }
@@ -157,12 +156,10 @@
 .project-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-  background: rgba(255, 255, 255, 0.98);
 }
 
 .project-image {
   height: 180px;
-  background: #f0f2f5;
   display: flex;
   align-items: center;
   justify-content: center;

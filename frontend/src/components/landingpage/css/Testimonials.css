@@ -43,7 +43,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background-image: url('../../../../public/solarbg.jpeg');
+  background-image: url('/solarbg.webp');
   background-size: cover;          /* Full coverage */
   background-position: center;     /* Center the image */
   background-repeat: no-repeat;    /* No tiling */

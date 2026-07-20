@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import SEO from '../../SEO/Seo';
 import '../css/ProjectDetail.css';
 
 const ProjectDetail = () => {
@@ -27,7 +28,14 @@ const ProjectDetail = () => {
   if (!project) return <div className="project-detail-notfound">Project not found</div>;
 
   return (
-    <div className="project-detail">
+    <>
+      <SEO
+        title={project.title}
+        description={project.shortDescription || project.longDescription || 'Energen solar project details.'}
+        ogImage={project.image}
+        keywords="solar project, renewable energy, Kenyan solar installation"
+      />
+      <div className="project-detail">
       <Link to="/projects" className="back-link">← Back to Projects</Link>
 
       <div className="project-detail-content">
@@ -59,6 +67,7 @@ const ProjectDetail = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

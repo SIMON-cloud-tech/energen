@@ -1,17 +1,36 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
+
 .hero {
   height: 90vh;
   min-height: 500px;
-  background: url('../../../../public/solarbg.jpeg')center/cover no-repeat;
+  background: url('/solarbg.webp') center/cover no-repeat;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+  /* GPU acceleration - smooth rendering */
+  transform: translateZ(0);
+  will-change: transform;
+  image-rendering: auto;
+  /* Fade in on load */
+  opacity: 0;
+  animation: heroFadeIn 0.8s ease forwards;
+}
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .hero-overlay {
@@ -20,23 +39,43 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.55); /* dark overlay for readability */
+  background: rgba(0, 0, 0, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
+  /* GPU acceleration */
+  transform: translateZ(0);
+  will-change: opacity;
 }
 
 .hero-content {
   max-width: 800px;
   padding: 2rem;
   color: white;
+  /* Smooth entrance */
+  transform: translateY(30px);
+  opacity: 0;
+  animation: contentSlideUp 0.8s ease 0.3s forwards;
+}
+
+@keyframes contentSlideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .hero-title {
   font-size: 2.8rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  /* Prevent jitter */
+  backface-visibility: hidden;
 }
 
 .hero-subtitle {
@@ -44,6 +83,7 @@
   line-height: 1.6;
   margin-bottom: 1.5rem;
   opacity: 0.9;
+  backface-visibility: hidden;
 }
 
 .marketing-strip {
@@ -68,8 +108,10 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  /* Only animate specific properties */
+  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
   text-decoration: none;
+  will-change: transform;
 }
 
 .btn-primary {

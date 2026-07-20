@@ -30,6 +30,11 @@
   display: flex;
   align-items: center;
 }
+.navbar-logo-img {
+  height: 40px;   /* Adjust as needed */
+  width: auto;
+  margin-right: 0.5rem;
+}
 
 .logo-text {
   color: white;
@@ -77,7 +82,7 @@
   position: relative;
   color: white;
   text-decoration: none;
-  background-color: none !important;
+  background-color:transparent;
   display: flex;
   border: none;
   align-items: center;

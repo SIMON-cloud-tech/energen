@@ -1,9 +1,31 @@
+import { useEffect, useRef } from 'react';
 import '../css/Story.css';
-import aboutImage from '../../../../public/about.jpeg';
+import aboutImage from '/about.webp'; // Convert to WebP!
+
 const Story = () => {
+  const sectionRef = useRef(null);
+
+  // Lazy load animations on scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('mvv-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const cards = document.querySelectorAll('.mvv-card');
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="about-page">
-
       {/* ── HERO / INTRO SECTION ── */}
       <section className="about-hero">
         <div className="about-hero-overlay">
@@ -15,7 +37,12 @@ const Story = () => {
       {/* ── COMPANY INFO + IMAGE ── */}
       <section className="about-content">
         <div className="about-image">
-            <img src={aboutImage} alt="Energen Company" />
+          <img 
+            src={aboutImage} 
+            alt="Energen Company" 
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <div className="about-text">
           <h2>Who We Are</h2>
@@ -34,7 +61,7 @@ const Story = () => {
       </section>
 
       {/* ── MISSION, VISION, VALUES ── */}
-      <section className="about-mvv">
+      <section className="about-mvv" ref={sectionRef}>
         <div className="mvv-card">
           <h3>🎯 Mission</h3>
           <p>
@@ -58,7 +85,6 @@ const Story = () => {
           </ul>
         </div>
       </section>
-
     </div>
   );
 };
