@@ -7,7 +7,7 @@
 .hero {
   height: 90vh;
   min-height: 500px;
-  background: url('/solarbg.webp') center/cover no-repeat;
+  background: url('../../../../public/solarbg.jpeg') center/cover no-repeat;
   position: relative;
   display: flex;
   align-items: center;

@@ -42,7 +42,7 @@ exports.addBlog = async (req, res) => {
     // ── Upload image to Cloudinary if provided ──
     let imageUrl = '';
     if (imageFile) {
-      imageUrl = await uploadToCloudinary(imageFile.path, 'energen/blogs');
+      imageUrl = await uploadToCloudinary(imageFile.buffer, 'energen/blogs');
     }
 
 
@@ -81,7 +81,7 @@ exports.updateBlog = async (req, res) => {
     if (keywords !== undefined) blog.keywords = keywords;
 
     if (imageFile) {
-      blog.image = await uploadToCloudinary(imageFile.path, 'energen/blogs');
+      blog.image = await uploadToCloudinary(imageFile.buffer, 'energen/blogs');
     }
     
 

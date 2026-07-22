@@ -30,7 +30,6 @@ const Navbar = ({ cart, setCart, cartCount = 0 }) => {
         <div className="navbar-container">
           <Link to="/" className="navbar-logo">
             <img src={LogoImage} alt="Energen Logo" className="navbar-logo-img" />
-            <span className="logo-text">Ener<span className="highlight">gen</span></span>
           </Link>
 
           <ul className="nav-menu">

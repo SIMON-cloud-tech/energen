@@ -31,16 +31,9 @@
   align-items: center;
 }
 .navbar-logo-img {
-  height: 40px;   /* Adjust as needed */
+  height: 100px;   /* Adjust as needed */
   width: auto;
   margin-right: 0.5rem;
-}
-
-.logo-text {
-  color: white;
-}
-.highlight {
-  color: #f39c12;
 }
 
 .nav-menu {

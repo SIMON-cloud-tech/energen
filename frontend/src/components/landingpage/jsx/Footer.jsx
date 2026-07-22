@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 import {
   FaFacebook,
-  FaInstagram,
-  FaTwitter,
-  FaLinkedin,
-  FaWhatsapp,
+  FaTiktok,
+  
 } from 'react-icons/fa';
 import '../css/Footer.css';
 
@@ -64,28 +62,14 @@ const Footer = () => {
 
           {/* SOCIALS */}
           <div>
-            <h2 className="footer-title small">Follow Us</h2>
+            <h2 className="footer-title small">Follow Us On</h2>
             <div className="footer-socials">
-              <a href="#" className="social-icon"><FaFacebook /></a>
-              <a href="#" className="social-icon"><FaInstagram /></a>
-              <a href="#" className="social-icon"><FaTwitter /></a>
-              <a href="#" className="social-icon"><FaLinkedin /></a>
+              <a href="https://www.facebook.com/share/18JMsrLyF2/" className="social-icon"><FaFacebook /></a>
+              <a href="https://vm.tiktok.com/ZS9rAK5PoeQtf-dD3rW/" className="social-icon"><FaTiktok /></a>
             </div>
           </div>
 
           {/* WHATSAPP */}
-          <div>
-            <h2 className="footer-title small">Join Our Channel</h2>
-            <a
-              href="https://wa.me/254727713219"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="whatsapp-btn"
-            >
-              <FaWhatsapp />
-              Join WhatsApp
-            </a>
-          </div>
         </div>
 
         {/* BOTTOM */}

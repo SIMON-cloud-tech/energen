@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import '../css/Story.css';
-import aboutImage from '/about.webp'; // Convert to WebP!
+import aboutImage from '../../../../public/about.jpeg'; // Convert to WebP!
 
 const Story = () => {
   const sectionRef = useRef(null);

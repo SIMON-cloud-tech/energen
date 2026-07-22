@@ -27,7 +27,7 @@ exports.addProduct = async (req, res) => {
     // ── Upload image to Cloudinary if provided ──
     let imageUrl = '';
     if (imageFile) {
-      imageUrl = await uploadToCloudinary(imageFile.path, 'energen/products');
+      imageUrl = await uploadToCloudinary(imageFile.buffer, 'energen/products');
     }
 
 
@@ -69,7 +69,7 @@ exports.updateProduct = async (req, res) => {
     
         // ── If a new image is uploaded, upload to Cloudinary ──
     if (imageFile) {
-      product.image = await uploadToCloudinary(imageFile.path, 'energen/products');
+      product.image = await uploadToCloudinary(imageFile.buffer, 'energen/products');
     }
 
     await product.save();

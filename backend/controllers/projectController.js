@@ -1,4 +1,11 @@
+const crypto = require('crypto');
+const uploadToCloudinary = require('../utils/uploadToCloudinary');
 const Project = require('../models/Projects');
+
+// TEMP DEBUG — remove after confirming
+console.log('📁 projectController.js loaded');
+console.log('📁 uploadToCloudinary type:', typeof uploadToCloudinary);
+console.log('📁 __dirname:', __dirname);
 
 // ─── PUBLIC: get all projects (no userId filter) ───
 exports.getProjects = async (req, res) => {
@@ -40,7 +47,7 @@ exports.addProject = async (req, res) => {
     // ── Upload image to Cloudinary if provided ──
     let imageUrl = '';
     if (imageFile) {
-      imageUrl = await uploadToCloudinary(imageFile.path, 'energen/projects');
+      imageUrl = await uploadToCloudinary(imageFile.buffer, 'energen/projects');
     }
 
     const newProject = new Project({
@@ -88,7 +95,7 @@ exports.updateProject = async (req, res) => {
     
    // ── If a new image is uploaded, upload to Cloudinary ──
     if (imageFile) {
-      project.image = await uploadToCloudinary(imageFile.path, 'energen/projects');
+      project.image = await uploadToCloudinary(imageFile.buffer, 'energen/projects');
     }
 
     await project.save();
