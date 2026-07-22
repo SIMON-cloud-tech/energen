@@ -96,12 +96,14 @@ const ProjectManage = () => {
   };
 
   const handleDelete = async (id) => {
+    console.log('🗑️ delete clicked — id:', id);
     if (!window.confirm('Delete this project?')) return;
     try {
       const res = await fetch(`/api/projects/${id}`, {
         method: 'DELETE',
         credentials: 'include'
       });
+      console.log('🗑️ response status:', res.status)
       if (!res.ok) throw new Error('Delete failed');
       await fetchProjects();
     } catch (err) {

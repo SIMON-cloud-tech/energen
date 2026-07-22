@@ -2,10 +2,6 @@ const crypto = require('crypto');
 const uploadToCloudinary = require('../utils/uploadToCloudinary');
 const Project = require('../models/Projects');
 
-// TEMP DEBUG — remove after confirming
-console.log('📁 projectController.js loaded');
-console.log('📁 uploadToCloudinary type:', typeof uploadToCloudinary);
-console.log('📁 __dirname:', __dirname);
 
 // ─── PUBLIC: get all projects (no userId filter) ───
 exports.getProjects = async (req, res) => {
