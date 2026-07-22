@@ -8,6 +8,7 @@ const ProductManage = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(3);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     price: '',
@@ -90,21 +91,22 @@ const ProductManage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this product?')) return;
-    try {
-      const res = await fetch(`/api/inventory/${id}`, {
-        method: 'DELETE',
-        credentials: 'include'
-      });
-      if (!res.ok) throw new Error('Delete failed');
-      
-      // ⬇️ ⬇️ ⬇️ FETCH PRODUCTS CALL 2 ⬇️ ⬇️ ⬇️
-      await fetchProducts();  // <-- Refresh product list after delete
-      
-    } catch (err) {
-      console.error('Delete error:', err);
-    }
-  };
+  if (confirmDeleteId !== id) {
+    setConfirmDeleteId(id);
+    return;
+  }
+  setConfirmDeleteId(null);
+  try {
+    const res = await fetch(`/api/inventory/${id}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+    if (!res.ok) throw new Error('Delete failed');
+    await fetchProducts();
+  } catch (err) {
+    console.error('Delete error:', err);
+  }
+};
 
   const handleEdit = (product) => {
     setEditingId(product.id);
@@ -170,7 +172,7 @@ const ProductManage = () => {
                 <FiEdit /> Edit
               </button>
               <button className="delete-btn" onClick={() => handleDelete(product.id)}>
-                <FiTrash2 /> Delete
+                 <FiTrash2 /> {confirmDeleteId === product.id ? 'Confirm?' : 'Delete'}
               </button>
             </div>
           </div>

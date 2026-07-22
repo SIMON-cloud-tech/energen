@@ -60,8 +60,8 @@ const BlogDetail = () => {
         </div>
 
         {/* CTA Button */}
-        <button className="back-home-btn" onClick={() => navigate('/')}>
-          ← Back to Home
+        <button className="back-home-btn" onClick={() => navigate('/contact')}>
+          Start  a project
         </button>
       </div>
     </div>

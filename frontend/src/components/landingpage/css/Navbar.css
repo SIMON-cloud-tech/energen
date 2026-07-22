@@ -63,7 +63,11 @@
 .nav-link:hover {
   color: #f39c12;
 }
-
+.nav-right {
+  display: flex;           /* ← ADDED: was missing entirely, causing overlap */
+  align-items: center;
+  gap: 1rem;               /* ← ADDED: space between cart icon and hamburger */
+}
 /* Cart */
 .navbar-cart {
   display: flex;
@@ -75,9 +79,12 @@
   position: relative;
   color: white;
   text-decoration: none;
+   background: none;   
   background-color:transparent;
   display: flex;
   border: none;
+   cursor: pointer;
+   padding: 0;
   align-items: center;
   transition: color 0.3s;
 }
@@ -168,6 +175,23 @@
 }
 
 .mobile-nav-link:hover {
+  color: #f39c12;
+}
+.mobile-nav-item button.mobile-nav-link {
+  background: none;        
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 0.75rem;
+  width: 100%;
+  display: inline-block;
+  transition: color 0.3s;
+  text-align: center;
+}
+
+.mobile-nav-item button.mobile-nav-link:hover {
   color: #f39c12;
 }
 

@@ -8,6 +8,7 @@ const BlogManage = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(3);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null); // ← ADDED
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -16,12 +17,9 @@ const BlogManage = () => {
   });
   const [previewUrl, setPreviewUrl] = useState('');
 
-  // ── Fetch blogs ──
   const fetchBlogs = async () => {
     try {
-      const res = await fetch('/api/blogs', {
-        credentials: 'include'
-      });
+      const res = await fetch('/api/blogs', { credentials: 'include' });
       if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
       setBlogs(data);
@@ -81,8 +79,14 @@ const BlogManage = () => {
     setPreviewUrl('');
   };
 
+  // ── UPDATED: no window.confirm, uses confirmDeleteId state instead ──
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this blog post?')) return;
+    if (confirmDeleteId !== id) {
+      setConfirmDeleteId(id); // first click — show confirm
+      return;
+    }
+    // second click — actually delete
+    setConfirmDeleteId(null);
     try {
       const res = await fetch(`/api/blogs/${id}`, {
         method: 'DELETE',
@@ -121,8 +125,8 @@ const BlogManage = () => {
   if (loading) return <div className="blog-loading">Loading blogs...</div>;
 
   return (
-    <div className="project-manage">  {/* Using project-manage class */}
-      <div className="project-header">  {/* Using project-header */}
+    <div className="project-manage">
+      <div className="project-header">
         <div className="header-actions">
           {hasMore && (
             <button className="load-more-btn" onClick={loadMore}>
@@ -135,26 +139,23 @@ const BlogManage = () => {
         </div>
       </div>
 
-      {/* Blog Cards Grid */}
-      <div className="project-grid">  {/* Using project-grid */}
+      <div className="project-grid">
         {visibleBlogs.map((blog) => (
-          <div key={blog.id} className="project-card">  {/* Using project-card */}
-            <div className="project-image">  {/* Using project-image */}
+          <div key={blog.id} className="project-card">
+            <div className="project-image">
               {blog.image ? (
-                 <img src={blog.image} alt={blog.title} />
+                <img src={blog.image} alt={blog.title} />
               ) : (
                 <div className="placeholder-image">No Image</div>
               )}
             </div>
-            <div className="project-info">  {/* Using project-info */}
+            <div className="project-info">
               <h3>{blog.title}</h3>
-              {/* Using project-short as description (blogs have only one description field) */}
               <p className="project-short">
                 {blog.description && blog.description.length > 100
                   ? `${blog.description.substring(0, 100)}...`
                   : blog.description}
               </p>
-              {/* Keeping keyword classes as is – specific to blogs */}
               {blog.keywords && (
                 <div className="blog-keywords">
                   {blog.keywords.split(',').map((kw, i) => (
@@ -163,12 +164,16 @@ const BlogManage = () => {
                 </div>
               )}
             </div>
-            <div className="project-actions">  {/* Using project-actions */}
+            <div className="project-actions">
               <button className="edit-btn" onClick={() => handleEdit(blog)}>
                 <FiEdit /> Edit
               </button>
-              <button className="delete-btn" onClick={() => handleDelete(blog.id)}>
-                <FiTrash2 /> Delete
+              {/* ── UPDATED: two-click delete, no window.confirm ── */}
+              <button
+                className="delete-btn"
+                onClick={() => handleDelete(blog.id)}
+              >
+                <FiTrash2 /> {confirmDeleteId === blog.id ? 'Confirm?' : 'Delete'}
               </button>
             </div>
           </div>
@@ -176,12 +181,11 @@ const BlogManage = () => {
       </div>
 
       {visibleBlogs.length === 0 && (
-        <div className="no-projects">  {/* Using no-projects */}
+        <div className="no-projects">
           <p>No blog posts yet. Click "Write Blog" to create one.</p>
         </div>
       )}
 
-      {/* Add/Edit Modal */}
       {showForm && (
         <div className="modal-overlay" onClick={handleCancel}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>

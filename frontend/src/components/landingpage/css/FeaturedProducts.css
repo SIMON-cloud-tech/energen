@@ -184,6 +184,9 @@
 /* ── Add to Cart ── */
 .featured-actions {
   padding: 0 1rem 1rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .add-to-cart-btn {
@@ -198,7 +201,10 @@
   font-weight: 600;
   transition: background 0.2s;
 }
-
+.featured-card:hover .featured-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
 .add-to-cart-btn:hover {
   background: #219a52;
 }

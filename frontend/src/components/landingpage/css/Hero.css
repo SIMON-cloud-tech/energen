@@ -13,11 +13,9 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  /* GPU acceleration - smooth rendering */
   transform: translateZ(0);
   will-change: transform;
   image-rendering: auto;
-  /* Fade in on load */
   opacity: 0;
   animation: heroFadeIn 0.8s ease forwards;
 }
@@ -43,7 +41,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* GPU acceleration */
   transform: translateZ(0);
   will-change: opacity;
 }
@@ -52,7 +49,6 @@
   max-width: 800px;
   padding: 2rem;
   color: white;
-  /* Smooth entrance */
   transform: translateY(30px);
   opacity: 0;
   animation: contentSlideUp 0.8s ease 0.3s forwards;
@@ -74,7 +70,6 @@
   font-weight: 700;
   margin-bottom: 1rem;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  /* Prevent jitter */
   backface-visibility: hidden;
 }
 
@@ -108,7 +103,6 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  /* Only animate specific properties */
   transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
   text-decoration: none;
   will-change: transform;
@@ -142,15 +136,23 @@
     height: 70vh;
     min-height: 400px;
   }
+
+  .hero-content {
+    padding: 1.5rem;
+  }
+
   .hero-title {
     font-size: 2rem;
   }
+
   .hero-subtitle {
     font-size: 1rem;
   }
+
   .marketing-strip {
     font-size: 0.9rem;
   }
+
   .btn {
     padding: 0.6rem 1.5rem;
     font-size: 0.9rem;
@@ -158,14 +160,47 @@
 }
 
 @media (max-width: 480px) {
-  .hero-title {
-    font-size: 1.6rem;
+  .hero-content {
+    padding: 1rem;
+    max-width: 100%;
   }
+
+  .hero-title {
+    font-size: 1.4rem;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .marketing-strip {
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+  }
+
   .hero-cta {
     flex-direction: column;
     align-items: center;
   }
+
   .btn {
     width: 80%;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-title {
+    font-size: 1.2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .marketing-strip {
+    display: none;
   }
 }

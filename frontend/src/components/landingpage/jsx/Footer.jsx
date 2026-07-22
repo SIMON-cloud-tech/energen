@@ -52,7 +52,7 @@ const Footer = () => {
 
             <div className="footer-location">
               <h2 className="footer-title small">Location</h2>
-              <p>Nextgen Mall, Mombasa Road &amp; Rubby Mall, Nairobi CBD</p>
+              <p>Nairobi CBD Cookie House</p>
             </div>
           </div>
         </div>

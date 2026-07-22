@@ -13,22 +13,22 @@ const CONTACT_DETAILS = [
   {
     id: 'location',
     label: 'Locations',
-    value: 'Nextgen Mall, Mombasa Road & Rubby Mall, Nairobi CBD',
-    href: 'https://maps.google.com/?q=Nextgen+Mall+Mombasa+Road+Nairobi',
+    value: 'Nairobi CBD Cookie House',
+    href: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.816031465158!2d36.82632290000001!3d-1.2843004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f11938e8142e5%3A0xb86e39e564106f6f!2sCookie%20House!5e0!3m2!1sen!2ske!4v1784716867725!5m2!1sen!2ske',
     icon: <FaMapMarkerAlt />,
   },
   {
     id: 'phone',
     label: 'Phone / WhatsApp',
-    value: '+254 727 713 219 | +254 579 573 792',
+    value: '+254 727 713 219',
     href: 'tel:+254727713219',
     icon: <FaPhone />,
   },
   {
     id: 'email',
     label: 'Email',
-    value: 'info@energen.co.ke',
-    href: 'mailto:info@energen.co.ke',
+    value: 'energensolar15@gmail.com',
+    href: 'mailto:energensolar15@gmail.com',
     icon: <FaEnvelope />,
   },
   {

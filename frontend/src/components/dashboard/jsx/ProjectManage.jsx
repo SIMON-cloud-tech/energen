@@ -8,6 +8,7 @@ const ProjectManage = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(3);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null); 
   const [formData, setFormData] = useState({
     title: '',
     client: '',
@@ -95,19 +96,21 @@ const ProjectManage = () => {
     setPreviewUrl('');
   };
 
-  const handleDelete = async (id) => {
-    console.log('🗑️ delete clicked — id:', id);
-    if (!window.confirm('Delete this project?')) return;
+      const handleDelete = async (id) => {
+       if (confirmDeleteId !== id) {
+       setConfirmDeleteId(id);
+       return;
+     }
+     setConfirmDeleteId(null);
     try {
-      const res = await fetch(`/api/projects/${id}`, {
-        method: 'DELETE',
-        credentials: 'include'
-      });
-      console.log('🗑️ response status:', res.status)
-      if (!res.ok) throw new Error('Delete failed');
-      await fetchProjects();
+    const res = await fetch(`/api/projects/${id}`, {
+      method: 'DELETE',
+      credentials: 'include'
+     });
+     if (!res.ok) throw new Error('Delete failed');
+     await fetchProjects();
     } catch (err) {
-      console.error('Delete error:', err);
+    console.error('Delete error:', err);
     }
   };
 
@@ -175,7 +178,7 @@ const ProjectManage = () => {
                 <FiEdit /> Edit
               </button>
               <button className="delete-btn" onClick={() => handleDelete(project.id)}>
-                <FiTrash2 /> Delete
+                 <FiTrash2 /> {confirmDeleteId === project.id ? 'Confirm?' : 'Delete'}
               </button>
             </div>
           </div>
