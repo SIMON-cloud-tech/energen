@@ -24,7 +24,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const FRONTEND_ORIGIN = process.env.NODE_ENV === 'production'
-  ? 'https://energen-6t0a.onrender.com'
+  ? 'https://energen.co.ke'
   : 'http://localhost:5173';
 
 // Render (and most hosts) sit behind a reverse proxy. Without this, Express
