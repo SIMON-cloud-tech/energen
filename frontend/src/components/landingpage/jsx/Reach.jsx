@@ -5,8 +5,7 @@ import '../css/Contact.css';
 // ── Config ──
 const WA_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '254727713219';
 const MAP_EMBED =
-  import.meta.env.VITE_MAP_EMBED_URL ||
-  'https://www.google.com/maps?q=Nextgen+Mall+Mombasa+Road+Nairobi&z=15&output=embed';
+  import.meta.env.VITE_MAP_EMBED_URL;
 
 // ── Contact Details ──
 const CONTACT_DETAILS = [
