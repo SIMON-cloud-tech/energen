@@ -5,7 +5,7 @@ import '../css/Contact.css';
 // ── Config ──
 const WA_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '254727713219';
 const MAP_EMBED =
-  import.meta.env.VITE_MAP_EMBED_URL;
+  import.meta.env.VITE_MAP_EMBED_URL || 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.816031465158!2d36.82632290000001!3d-1.2843004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f11938e8142e5%3A0xb86e39e564106f6f!2sCookie%20House!5e0!3m2!1sen!2ske!4v1784716867725!5m2!1sen!2ske';
 
 // ── Contact Details ──
 const CONTACT_DETAILS = [
