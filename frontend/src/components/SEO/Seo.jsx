@@ -15,10 +15,10 @@ const SEO = ({
   const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
   const siteDescription =
     description ||
-    'Energen delivers commercial and residential solar energy systems across Kenya, with efficient panels, installation, and support.';
+    'Energen delivers reliable commercial and residential solar energy systems across Kenya, including Nairobi, Umoja, Donholm, Pipeline, Imara Daima, Kiambu, Thika, Congo, Wajir, and Isiolo. From solar panel installation and hybrid inverters to lithium battery storage and off-grid solar solutions, Energen provides efficient, affordable, and dependable renewable energy systems for homes, businesses, and rural communities across Kenya, backed by professional installation and ongoing support.';
   const siteKeywords =
     keywords ||
-    'solar energy Kenya, solar installation, renewable energy, solar panels, battery storage, Energen';
+    'solar energy Kenya, solar installation Nairobi, renewable energy Kenya, solar panels Kenya, battery storage Kenya, solar installation Umoja, solar power Donholm, solar energy Pipeline Nairobi, solar installer Imara Daima, solar panels Kiambu, solar installation Thika, solar power Congo Nairobi, solar installation Wajir, solar panels Isiolo, off-grid solar Kenya, hybrid solar inverter Kenya, lithium battery solar Kenya, affordable solar panels Kenya, solar backup power Kenya, Energen solar Kenya';
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
   const baseUrl = import.meta.env.VITE_SITE_URL || origin || 'https://www.energen.co.ke';
   const defaultImage = ogImage || `${baseUrl}/logo.png`;
