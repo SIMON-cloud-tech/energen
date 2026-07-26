@@ -24,7 +24,14 @@ const LatestBlogs = () => {
     fetchBlogs();
   }, []);
 
-  if (loading) return <div className="latest-loading">Loading articles...</div>;
+ if (loading) {
+  return (
+    <div className="products-loading">
+      <div className="spinner"></div>
+      <p>Loading products...</p>
+    </div>
+  );
+ }
   if (blogs.length === 0) return null;
 
   return (

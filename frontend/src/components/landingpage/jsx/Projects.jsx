@@ -48,7 +48,14 @@ const Projects = () => {
   const visibleProjects = filteredProjects.slice(0, visibleCount);
   const hasMore = visibleCount < filteredProjects.length;
 
-  if (loading) return <div className="projects-loading">Loading projects...</div>;
+ if (loading) {
+  return (
+    <div className="products-loading">
+      <div className="spinner"></div>
+      <p>Loading products...</p>
+    </div>
+  );
+ }
 
   return (
     <>

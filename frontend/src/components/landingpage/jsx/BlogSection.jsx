@@ -45,7 +45,14 @@ const BlogSection = () => {
   const visibleBlogs = filteredBlogs.slice(0, visibleCount);
   const hasMore = visibleCount < filteredBlogs.length;
 
-  if (loading) return <div className="blog-loading">Loading articles...</div>;
+  if (loading) {
+  return (
+    <div className="products-loading">
+      <div className="spinner"></div>
+      <p>Loading products...</p>
+    </div>
+  );
+ }
 
   return (
     <>

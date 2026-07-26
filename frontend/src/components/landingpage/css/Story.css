@@ -14,9 +14,10 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  /* Fade in on load */
+  /* Smoother, slightly snappier fade-in */
   opacity: 0;
-  animation: fadeIn 0.6s ease forwards;
+  animation: fadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: opacity, transform;
 }
 
 .about-hero-overlay {
@@ -35,11 +36,13 @@
   font-size: 2rem;
   color: #333;
   margin-bottom: 0.5rem;
+  transition: color 0.25s ease;
 }
 
 .about-hero p {
   font-size: 1.2rem;
   opacity: 0.9;
+  transition: opacity 0.25s ease;
 }
 
 /* ── Content: Image + Text ── */
@@ -50,7 +53,8 @@
   align-items: center;
   margin-bottom: 4rem;
   opacity: 0;
-  animation: fadeIn 0.6s ease 0.2s forwards;
+  animation: fadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+  will-change: opacity, transform;
 }
 
 .about-image {
@@ -61,21 +65,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f0f0; /* Placeholder background */
+  background: #f0f0f0; /* retained placeholder */
+  transition: box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-image:hover {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
 }
 
 .about-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Smooth image load */
-  transition: opacity 0.3s ease;
+  /* Smoother image appear + subtle scale for polish */
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+/* Once the image has loaded the browser will paint it; this keeps the transition smooth */
+.about-image img[src] {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .about-text h2 {
   font-size: 2rem;
   color: #1a2a6c;
   margin-bottom: 1rem;
+  transition: color 0.25s ease;
 }
 
 .about-text p {
@@ -83,6 +103,7 @@
   line-height: 1.7;
   color: #333;
   margin-bottom: 1rem;
+  transition: color 0.25s ease;
 }
 
 .about-text .tagline {
@@ -90,6 +111,12 @@
   font-weight: 700;
   color: #f39c12;
   letter-spacing: 1px;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.about-text .tagline:hover {
+  color: #e67e22; /* subtle warmer accent on hover – still in the same family */
+  transform: translateY(-1px);
 }
 
 /* ── Mission, Vision, Values ── */
@@ -101,42 +128,46 @@
 }
 
 .mvv-card {
-  background: white;
+  background: white; /* retained */
   padding: 2rem 1.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   
-  /* Start hidden */
+  /* Start hidden – same as before */
   opacity: 0;
   transform: translateY(30px);
+  will-change: opacity, transform;
 }
 
-/* Trigger animation when visible */
+/* Trigger animation when visible – smoother curve + slightly faster */
 .mvv-card.mvv-visible {
-  animation: slideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: slideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.mvv-card:nth-child(1).mvv-visible { animation-delay: 0.1s; }
-.mvv-card:nth-child(2).mvv-visible { animation-delay: 0.3s; }
-.mvv-card:nth-child(3).mvv-visible { animation-delay: 0.5s; }
+.mvv-card:nth-child(1).mvv-visible { animation-delay: 0.08s; }
+.mvv-card:nth-child(2).mvv-visible { animation-delay: 0.22s; }
+.mvv-card:nth-child(3).mvv-visible { animation-delay: 0.36s; }
 
 .mvv-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.13);
 }
 
 .mvv-card h3 {
   font-size: 1.4rem;
   color: #1a2a6c;
   margin-bottom: 0.75rem;
+  transition: color 0.25s ease;
 }
 
 .mvv-card p {
   color: #555;
   line-height: 1.6;
   font-size: 0.95rem;
+  transition: color 0.25s ease;
 }
 
 .mvv-card ul {
@@ -149,13 +180,19 @@
   padding: 0.3rem 0;
   font-weight: 500;
   color: #1a2a6c;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.mvv-card ul li:hover {
+  color: #f39c12; /* accent on hover – still using your palette */
+  transform: translateX(2px);
 }
 
 /* ── Animations ── */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -166,7 +203,7 @@
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(28px);
   }
   to {
     opacity: 1;

@@ -25,7 +25,14 @@ const BlogDetail = () => {
     fetchBlog();
   }, [id]);
 
-  if (loading) return <div className="blog-detail-loading">Loading article...</div>;
+  if (loading) {
+  return (
+    <div className="products-loading">
+      <div className="spinner"></div>
+      <p>Loading products...</p>
+    </div>
+  );
+}
   if (!blog) return <div className="blog-detail-notfound">Article not found</div>;
 
   return (

@@ -30,7 +30,14 @@ const FeaturedProducts = () => {
     setCart(prev => addToCart(prev, product));
   };
 
-  if (loading) return <div className="featured-loading">Loading products...</div>;
+ if (loading) {
+  return (
+    <div className="products-loading">
+      <div className="spinner"></div>
+      <p>Loading products...</p>
+    </div>
+  );
+ }
   if (products.length === 0) return null;
 
   return (

@@ -52,7 +52,14 @@ const Products = () => {
   const visibleProducts = filteredProducts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredProducts.length;
 
-  if (loading) return <div className="products-loading">Loading products...</div>;
+  if (loading) {
+  return (
+    <div className="products-loading">
+      <div className="spinner"></div>
+      <p>Loading products...</p>
+    </div>
+  );
+  }
 
   return (
     <>

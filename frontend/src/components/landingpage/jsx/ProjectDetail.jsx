@@ -24,7 +24,14 @@ const ProjectDetail = () => {
     fetchProject();
   }, [id]);
 
-  if (loading) return <div className="project-detail-loading">Loading...</div>;
+  if (loading) {
+  return (
+    <div className="products-loading">
+      <div className="spinner"></div>
+      <p>Loading products...</p>
+    </div>
+  );
+ }
   if (!project) return <div className="project-detail-notfound">Project not found</div>;
 
   return (

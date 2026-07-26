@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Oval } from 'react-loader-spinner';
 import Loader from './components/landingpage/jsx/Loader';
 // Layouts
 import PublicLayout from './layouts/PublicLayout';
@@ -43,30 +42,8 @@ function App() {
     checkAuth();
   }, []);
 
-  //Add a loading spinner to show a spinnner while loading
   if (loading) {
-  return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column',
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh',
-      background: '#1a2a6c'
-    }}>
-      <Oval
-        height={80}
-        width={80}
-        color="#f39c12"
-        secondaryColor="#2ecc71"
-        ariaLabel="loading"
-        strokeWidth={5}
-      />
-      <p style={{ color: 'white', marginTop: '20px', fontFamily: 'Arial' }}>
-        Loading...
-      </p>
-    </div>
-  );
+    return <Loader />;
   }
 
   const isAuthenticated = !!user;
