@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import Footer from '../components/landingpage/jsx/Footer';
-import Navbar from '../components/landingpage/jsx/Navbar';
+import Footer from '../components/landingpage/jsx/Footer.jsx';
+import Navbar from '../components/landingpage/jsx/Navbar.jsx';
 
 const PublicLayout = () => {
   const [cart, setCart] = useState(() => {

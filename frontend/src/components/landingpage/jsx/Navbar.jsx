@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FiShoppingCart, FiMenu, FiX, FiSettings } from 'react-icons/fi';
 import Cart from './Cart';
 import '../css/Navbar.css';
-import LogoImage from '../../../../public/logo.png'
+import LogoImage from '/logo.png'
 
 const MENU_ITEMS = [
   { label: 'Home', path: '/' },

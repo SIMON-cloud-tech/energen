@@ -1,13 +1,13 @@
 
-import SEO from '../components/SEO/Seo';
-import Hero from '../components/landingpage/jsx/Hero';
-import Process from '../components/landingpage/jsx/Process';
-import Story from '../components/landingpage/jsx/Story';
-import FeaturedProducts from '../components/landingpage/jsx/FeaturedProducts';
-import Reach from '../components/landingpage/jsx/Reach';
-import ProjectsSection from '../components/landingpage/jsx/ProjectsSection';
-import LatestBlogs from '../components/landingpage/jsx/LatestBlogs';
-import Testimonials from '../components/landingpage/jsx/Testimonials';
+import SEO from '../components/SEO/Seo.jsx';
+import Hero from '../components/landingpage/jsx/Hero.jsx';
+import Process from '../components/landingpage/jsx/Process.jsx';
+import Story from '../components/landingpage/jsx/Story.jsx';
+import FeaturedProducts from '../components/landingpage/jsx/FeaturedProducts.jsx';
+import Reach from '../components/landingpage/jsx/Reach.jsx';
+import ProjectsSection from '../components/landingpage/jsx/ProjectsSection.jsx';
+import LatestBlogs from '../components/landingpage/jsx/LatestBlogs.jsx';
+import Testimonials from '../components/landingpage/jsx/Testimonials.jsx';
 
 
 function Home(){

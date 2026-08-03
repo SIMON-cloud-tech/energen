@@ -34,11 +34,13 @@ const Hero = () => {
             Power Your Future with Clean Solar Energy
           </h2>
 
-          <p className="hero-subtitle">
-            Energen delivers high‑quality solar solutions nationwide.
-            From residential installations to commercial projects, we help you
-            cut electricity costs, reduce carbon footprint, and gain energy independence.
-          </p>
+        <p className="hero-subtitle">
+       Energen delivers high‑quality solar solutions across Kenya —
+       from Nairobi estates like Umoja, Donholm, Syokimau, Imara Daima,
+       and Kitengela, to communities in Wajir and beyond. Whether for
+       homes or businesses, we help you cut electricity costs, shrink
+       your carbon footprint, and achieve true energy independence.
+       </p>
 
           <h4 className="marketing-strip">
             🌍 Eco‑Friendly  •  ⚡ Stable Power  •  💰 Lower Bills  •  🔋 Reliable

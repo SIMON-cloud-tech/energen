@@ -1,23 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Loader from './components/landingpage/jsx/Loader';
+import Loader from './components/landingpage/jsx/Loader.jsx';
 // Layouts
-import PublicLayout from './layouts/PublicLayout';
+import PublicLayout from './layouts/PublicLayout.jsx';
 
 // Public pages
-import Home from './pages/Home';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import Products from './components/landingpage/jsx/Products';
-import Projects from './components/landingpage/jsx/Projects';
-import ProjectDetail from './components/landingpage/jsx/ProjectDetail';
-import BlogDetail from './components/landingpage/jsx/BlogDetail';
-import BlogSection from './components/landingpage/jsx/BlogSection';
+import Home from './pages/Home.jsx';
+import About from './pages/About.jsx';
+import Contact from './pages/Contact.jsx';
+import Products from './components/landingpage/jsx/Products.jsx';
+import Projects from './components/landingpage/jsx/Projects.jsx';
+import ProjectDetail from './components/landingpage/jsx/ProjectDetail.jsx';
+import BlogDetail from './components/landingpage/jsx/BlogDetail.jsx';
+import BlogSection from './components/landingpage/jsx/BlogSection.jsx';
 
 // Admin / Auth
-import Auth from './components/dashboard/jsx/Auth';
-import Reset from './components/dashboard/jsx/Reset';
-import Dashboard from './components/dashboard/jsx/Dashboard';
+import Auth from './components/dashboard/jsx/Auth.jsx';
+import Reset from './components/dashboard/jsx/Reset.jsx';
+import Dashboard from './components/dashboard/jsx/Dashboard.jsx';
 
 function App() {
   const [user, setUser] = useState(null);

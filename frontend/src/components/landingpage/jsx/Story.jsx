@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import '../css/Story.css';
-import aboutImage from '../../../../public/about.webp'; // Convert to WebP!
+import aboutImage from '/about.webp'; // Convert to WebP!
 
 const Story = () => {
   const sectionRef = useRef(null);
@@ -47,14 +47,23 @@ const Story = () => {
         <div className="about-text">
           <h2>Who We Are</h2>
           <p>
-            <strong>Energen Systems & General Supplies Ltd.</strong> is a company 
-            that specializes in Solar Lighting & Installation, Solar Water Pumps, 
-            Solar Hot Water, and Solar Power Backup Systems, amongst others.
+            <strong>Energen Systems & General Supplies Ltd.</strong>is a trusted solar energy company in Kenya 
+            specializing in solar lighting and installation, solar water pumps for farms in Thika and Gatundu,
+             solar hot water systems for households in Kiambu estates like Ruiru and Githunguri, and solar 
+             power backup solutions for Nairobi businesses in Westlands, Industrial Area, and Buruburu. 
+            Our expertise ensures reliable, affordable, and sustainable energy for both urban and rural communities.
           </p>
           <p>
-            Founded in <strong>2010</strong>, Energen has expanded its services 
-            and has since successfully installed over <strong>500 homes and 
-            institutions</strong> across the country.
+            Founded in <strong>2020</strong>,Energen has rapidly expanded 
+            its services and successfully installed solar 
+            systems in over 500 homes, schools, 
+            and institutions across Nairobi, Kiambu, 
+            and Thika. From residential rooftops 
+            in Kasarani and South B, to commercial 
+            projects in Donholm and Kitengela, and 
+            rural installations in Limuru and Juja, 
+            we continue to power communities with clean energy while 
+            reducing electricity costs and promoting sustainable living.
           </p>
           <p className="tagline">⚡ Energy That Cares</p>
         </div>

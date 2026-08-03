@@ -22,10 +22,13 @@ const Footer = () => {
           <div>
             <h2 className="footer-title main">Energen</h2>
             <p className="footer-text">
-              Powering Kenya with clean, reliable solar energy. 
-              We supply and install solar solutions for homes, businesses, 
-              and institutions across the country.
+              Powering Kenya with clean, reliable solar energy — reaching beyond
+              Nairobi’s estates into rural communities in Thika, Juja, Gatundu,
+              Limuru, and Githunguri in Kiambu. From homesteads and schools to
+              small trading centers, we supply and install solar solutions that
+              help families and institutions cut costs and embrace sustainable living.
             </p>
+
           </div>
 
           {/* QUICK LINKS */}
