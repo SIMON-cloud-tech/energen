@@ -68,7 +68,6 @@ Desktop.ini
 # ============================================
 uploads/
 backend/uploads/
-backend/data/*.json
 !backend/data/.gitkeep
 
 # ============================================
