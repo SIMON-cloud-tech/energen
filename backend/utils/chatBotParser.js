@@ -1,22 +1,54 @@
 const fs = require('fs');
 const path = require('path');
 
-const dataPath = path.join(__dirname, '../data/chatbotknowledge.json');
+// ─── Try multiple paths for Render compatibility ──
+const findKnowledgeBasePath = () => {
+  const possiblePaths = [
+    // Original path (works locally)
+    path.join(__dirname, '../data/chatbotknowledge.json'),
+    
+    // Using process.cwd() (works on Render)
+    path.join(process.cwd(), 'backend', 'data', 'chatbotknowledge.json'),
+    
+    // Fallback: data folder at root
+    path.join(process.cwd(), 'data', 'chatbotknowledge.json'),
+  ];
 
+  for (const tryPath of possiblePaths) {
+    try {
+      if (fs.existsSync(tryPath)) {
+        console.log('✅ Knowledge base found at:', tryPath);
+        return tryPath;
+      }
+    } catch (err) {
+      // Continue to next path
+    }
+  }
+  
+  console.warn('⚠️ Knowledge base file not found in any expected location.');
+  return null;
+};
+
+const dataPath = findKnowledgeBasePath();
+
+// ─── Read knowledge base ──────────────────────
 // ─── Read knowledge base ──────────────────────
 const readKnowledgeBase = () => {
   try {
-    if (!fs.existsSync(dataPath)) {
-      return { intents: [] };
+    const dataPath = findKnowledgeBasePath();
+    
+    if (!dataPath) {
+      console.warn('⚠️ Using default fallback knowledge base.');
+      return createDefaultKnowledgeBase();
     }
+
     const data = fs.readFileSync(dataPath, 'utf-8');
     return JSON.parse(data);
   } catch (error) {
     console.error('Error reading knowledge base:', error);
-    return { intents: [] };
+    return createDefaultKnowledgeBase();
   }
 };
-
 // ─── Extract keywords from user message ──────
 const extractKeywords = (message) => {
   const text = message.toLowerCase();
@@ -93,6 +125,24 @@ const buildResponse = (intent, contextReplies) => {
   }
 
   return response;
+};
+
+// ─── Default fallback if file is missing ──────
+const createDefaultKnowledgeBase = () => {
+  return {
+    intents: [
+      {
+        id: "welcome",
+        keywords: ["hello", "hi", "hey", "greetings", "good morning", "good afternoon", "how are you"],
+        reply: "Hello! Welcome to Energen. How can I help you today?"
+      },
+      {
+        id: "default",
+        keywords: [],
+        reply: "I'm not sure I fully understood that. Please contact us at energensolar15@gmail.com or +254727713219."
+      }
+    ]
+  };
 };
 
 // ─── Main parser function ─────────────────────
