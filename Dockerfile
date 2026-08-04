@@ -26,6 +26,8 @@ RUN cp -r ./frontend/dist/* ./backend/public/
 # ── Expose port ──
 EXPOSE 5000
 
+#copy backend/data
+COPY backend/data/ ./backend/data/
 # ── Start backend ──
 WORKDIR /app/backend
 CMD ["node", "server.js"]
