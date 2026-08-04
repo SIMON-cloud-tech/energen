@@ -17,6 +17,7 @@ const blogRoutes = require('./routes/blogRoute');
 const projectRoutes = require('./routes/projectRoute');
 const testimonialsRoutes = require('./routes/testimonialRoute');
 const dashboardRoutes = require('./routes/dashboardRoute');
+const chatbotRoutes = require('./routes/chatBotRoute');
 
 // ==================== APP SETUP ====================
 
@@ -67,6 +68,7 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/testimonials', testimonialsRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 app.get('/api/config', (req, res) => {
   res.json({

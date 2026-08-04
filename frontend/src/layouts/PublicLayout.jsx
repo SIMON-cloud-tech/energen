@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Footer from '../components/landingpage/jsx/Footer.jsx';
 import Navbar from '../components/landingpage/jsx/Navbar.jsx';
+import Chatbot from '../components/landingpage/jsx/Chatbot.jsx';
 
 const PublicLayout = () => {
   const [cart, setCart] = useState(() => {
@@ -21,6 +22,7 @@ const PublicLayout = () => {
       <main className="public-main">
         <Outlet context={{ cart, setCart }} />
       </main>
+      <Chatbot />
       <Footer />
     </>
   );
