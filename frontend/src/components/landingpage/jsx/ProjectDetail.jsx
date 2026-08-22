@@ -28,7 +28,7 @@ const ProjectDetail = () => {
   return (
     <div className="products-loading">
       <div className="spinner"></div>
-      <p>Loading products...</p>
+      <p>Loading projects...</p>
     </div>
   );
  }
