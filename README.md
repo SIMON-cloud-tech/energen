@@ -197,8 +197,3 @@ When an admin makes changes through the dashboard, the data flow works in revers
 **📱 Phone:** +254703433014
 
 Feel free to explore the platform and get in touch if you have any questions or would like to discuss a project.
-
-
-
-   
-# Furnihaven
